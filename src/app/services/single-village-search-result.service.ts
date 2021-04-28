@@ -9,13 +9,15 @@ import {
 } from './village-name.service';
 import {HttpServiceService} from './http-service.service';
 import {HttpErrorResponse} from '@angular/common/http';
+import {FilterServiceService} from './filter-service.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class SingleVillageSearchResultService {
 
-  constructor(private httpService: HttpServiceService) { }
+  constructor(private httpService: HttpServiceService,
+              private filterService: FilterServiceService) { }
 
   // 使用promise all
   async searchEncap(choose: Village): Promise<VillageSearchResult> {
@@ -26,7 +28,8 @@ export class SingleVillageSearchResultService {
       "fourthlastNames", "firstavailabilityorpurchase"];
 
     // 可以使用promise all --- const result = await Promise.all([].map(x=>this.httpService(x)))
-    const result: TableData[] = []
+    // 这里要改回TableData[](这里有问题）
+    const result: any[] = []
     for(let x of topics) {
 
       let response = await this.httpService.post('ccvg/search',{"villageid":choose.id, "topic": x})
@@ -38,6 +41,13 @@ export class SingleVillageSearchResultService {
       result.push(<TableData> response);
     }
     console.log("result ",result);
+
+    // 进行后端传回来的filter的处理，不写死filter
+    //console.log('print military filter',this.filterService.militaryFilterItem(result[4].filter));
+    //console.log("result[4].filter",result[4].filter);
+
+
+
     return {
       tables:[
         { // table1
@@ -57,6 +67,8 @@ export class SingleVillageSearchResultService {
           field: ['gazetteerId','gazetteerName','villageId','villageName','province','city','county','category1','data','unit'],
           data: result[0].data,
           treeFilter:{},
+          topic:"village",
+          id: choose.id,
         }, // end of table 1
         {  //table 2
             tableNameChinese: '村志基本信息',
@@ -70,7 +82,9 @@ export class SingleVillageSearchResultService {
             ],
             field: ['villageId', 'villageName', 'gazetteerId', 'gazetteerName', 'publishYear', 'publishType'],
             data: result[1].data,
-            treeFilter: {}
+            treeFilter: {},
+            topic: "gazetteerinformation",
+            id: choose.id,
           },  // end of table 2
         {   // table 3
             tableNameChinese: '自然灾害',
@@ -82,12 +96,9 @@ export class SingleVillageSearchResultService {
             ],
             field: ['gazetteerName','gazetteerId','year','category1'],
             data: result[2].data,
-            treeFilter: {
-              风灾: null,
-              水灾: null,
-              虫害: null,
-              龙卷风: null,
-            }
+            treeFilter: this.filterService.filterItem(result[2].filter),
+            topic: "naturaldisasters",
+            id: choose.id,
             // filters2
           },   // end of table 3
         {
@@ -101,7 +112,9 @@ export class SingleVillageSearchResultService {
             ],
             field: ['gazetteerName','gazetteerId','category1','data','unit'],
             data: result[3].data,
-            treeFilter:{}
+            treeFilter:{},
+            topic: "naturalenvironment",
+            id: choose.id,
           },
         {
             tableNameChinese: '军事政治',
@@ -117,156 +130,47 @@ export class SingleVillageSearchResultService {
             ],
             field: ['gazetteerName','gazetteerId','category1','category2','startYear','endYear','data','unit'],
             data: result[4].data,
-            treeFilter:{
-              村民纠纷: null,
-              共产党员: {
-                男: null,
-                女: null,
-                总: null,
-                少数民族: null,
-              },
-              阶级成分: {
-                富农: null,
-                贫下中农: null,
-                中农: null,
-                地主: null,
-              },
-              入伍: null,
-              新党员: {
-                男: null,
-                女: null,
-                总: null,
-              },
-              刑事案件: null,
-            }
+            treeFilter: this.filterService.filterItem(result[4].filter_2),
+            topic: "military",
+            id: choose.id,
           },
         {
-            tableNameChinese: '教育',
-            columnsName: [
-              {columnsHeaderChinese:'村志书名',columnsDef:'gazetteerName',cell: (row: ThreeLevelResult) => `${row.gazetteerName}`},
-              {columnsHeaderChinese:'村志代码',columnsDef:'gazetteerId', cell: (row: ThreeLevelResult) => `${row.gazetteerId}`},
-              {columnsHeaderChinese:'类别1',columnsDef:'category1',cell: (row: ThreeLevelResult) => `${row.category1}`},
-              {columnsHeaderChinese:'类别2',columnsDef:'category2',cell: (row: ThreeLevelResult) => `${row.category2}`},
-              {columnsHeaderChinese:'类别3',columnsDef:'category3',cell: (row: ThreeLevelResult) => `${row.category3}`},
-              {columnsHeaderChinese:'开始年份',columnsDef:'startYear',cell: (row: ThreeLevelResult) => `${row.startYear}`},
-              {columnsHeaderChinese:'结束年份',columnsDef:'endYear',cell: (row: ThreeLevelResult) => `${row.endYear}`},
-              {columnsHeaderChinese:'数据',columnsDef:'data',cell: (row: ThreeLevelResult) => `${row.data}`},
-              {columnsHeaderChinese:'单位',columnsDef:'unit',cell: (row: ThreeLevelResult) => `${row.unit}`},
-            ],
-            field: ['gazetteerName','gazetteerId','category1','category2','category3','startYear','endYear','data','unit'],
-            data: result[5].data,
-            treeFilter:{
-              受教育程度:{
-                文盲: null,
-                小学: null,
-                初中: null,
-                中专高中: null,
-                大专以上: null,
-              },
-              小学老师: null,
-              小学在校生: null,
-              '新入学生 - 大学': null,
-
-            }
-          },
+          tableNameChinese: '教育',
+          columnsName: [
+            {columnsHeaderChinese: '村志书名', columnsDef: 'gazetteerName', cell: (row: ThreeLevelResult) => `${row.gazetteerName}`},
+            {columnsHeaderChinese: '村志代码', columnsDef: 'gazetteerId', cell: (row: ThreeLevelResult) => `${row.gazetteerId}`},
+            {columnsHeaderChinese: '类别1', columnsDef: 'category1', cell: (row: ThreeLevelResult) => `${row.category1}`},
+            {columnsHeaderChinese: '类别2', columnsDef: 'category2', cell: (row: ThreeLevelResult) => `${row.category2}`},
+            {columnsHeaderChinese: '开始年份', columnsDef: 'startYear', cell: (row: ThreeLevelResult) => `${row.startYear}`},
+            {columnsHeaderChinese: '结束年份', columnsDef: 'endYear', cell: (row: ThreeLevelResult) => `${row.endYear}`},
+            {columnsHeaderChinese: '数据', columnsDef: 'data', cell: (row: ThreeLevelResult) => `${row.data}`},
+            {columnsHeaderChinese: '单位', columnsDef: 'unit', cell: (row: ThreeLevelResult) => `${row.unit}`},
+          ],
+          field: ['gazetteerName', 'gazetteerId', 'category1', 'category2', 'startYear', 'endYear', 'data', 'unit'],
+          data: result[5].data,
+          treeFilter: this.filterService.filterItem(result[5].filter_2),
+          topic: "education",
+          id: choose.id,
+        },
         {
-            tableNameChinese: '经济',
-            columnsName: [
-              {columnsHeaderChinese: '村志书名', columnsDef: 'gazetteerName', cell: (row: ThreeLevelResult) => `${row.gazetteerName}`},
-              {columnsHeaderChinese: '村志代码', columnsDef: 'gazetteerId', cell: (row: ThreeLevelResult) => `${row.gazetteerId}`},
-              {columnsHeaderChinese: '类别1', columnsDef: 'category1', cell: (row: ThreeLevelResult) => `${row.category1}`},
-              {columnsHeaderChinese: '类别2', columnsDef: 'category2', cell: (row: ThreeLevelResult) => `${row.category2}`},
-              {columnsHeaderChinese: '类别3', columnsDef: 'category3', cell: (row: ThreeLevelResult) => `${row.category3}`},
-              {columnsHeaderChinese: '开始年份', columnsDef: 'startYear', cell: (row: ThreeLevelResult) => `${row.startYear}`},
-              {columnsHeaderChinese: '结束年份', columnsDef: 'endYear', cell: (row: ThreeLevelResult) => `${row.endYear}`},
-              {columnsHeaderChinese: '数据', columnsDef: 'data', cell: (row: ThreeLevelResult) => `${row.data}`},
-              {columnsHeaderChinese: '单位', columnsDef: 'unit', cell: (row: ThreeLevelResult) => `${row.unit}`},
-            ],
-            field: ['gazetteerName', 'gazetteerId', 'category1', 'category2', 'category3', 'startYear', 'endYear', 'data', 'unit'],
-            data: result[6].data,
-            treeFilter: {
-              电价: {
-                General: null,
-                农业: null,
-                工业: null,
-                商业: null,
-                生活: {
-                  全村: null,
-                  每户: null,
-                  每人: null,
-                }
-              },
-              集体经济收入: {
-                第一产业: null,
-                第二产业: null,
-                第三产业: {
-                  商饮业: null,
-                  服务业: null,
-                },
-                种植业: {
-                  粮食: null,
-                  水果: null,
-                  蔬菜: null,
-                },
-                林业: null,
-                牧业: null,
-                副业: {
-                  仓储业: null,
-                  运输业: null,
-                  建筑业: null,
-                },
-              },
-              水价: {
-                General: null,
-                生活: null,
-                农业: null,
-                工业: null,
-                商业: null,
-              },
-              用电量: {
-                General: null,
-                农业: null,
-                工业: null,
-                商业: null,
-                生活: {
-                  全村: null,
-                  每户: null,
-                  每人: null,
-                }
-              },
-              用水量: {
-                General: null,
-                生活: null,
-                农业: null,
-                工业: null,
-                商业: null,
-              },
-              总产值: {
-                第一产业: null,
-                第二产业: null,
-                第三产业: {
-                  商饮业: null,
-                  服务业: null,
-                },
-                种植业: {
-                  粮食: null,
-                  水果: null,
-                  蔬菜: null,
-                },
-                林业: null,
-                牧业: null,
-                副业: {
-                  仓储业: null,
-                  运输业: null,
-                  建筑业: null,
-                },
-              },
-              粮食总产量: null,
-              人均居住面积: null,
-              人均收入: null,
-              耕地面积: null,
-            },
-          },
+          tableNameChinese: '经济',
+          columnsName: [
+            {columnsHeaderChinese: '村志书名', columnsDef: 'gazetteerName', cell: (row: ThreeLevelResult) => `${row.gazetteerName}`},
+            {columnsHeaderChinese: '村志代码', columnsDef: 'gazetteerId', cell: (row: ThreeLevelResult) => `${row.gazetteerId}`},
+            {columnsHeaderChinese: '类别1', columnsDef: 'category1', cell: (row: ThreeLevelResult) => `${row.category1}`},
+            {columnsHeaderChinese: '类别2', columnsDef: 'category2', cell: (row: ThreeLevelResult) => `${row.category2}`},
+            {columnsHeaderChinese: '类别3', columnsDef: 'category3', cell: (row: ThreeLevelResult) => `${row.category3}`},
+            {columnsHeaderChinese: '开始年份', columnsDef: 'startYear', cell: (row: ThreeLevelResult) => `${row.startYear}`},
+            {columnsHeaderChinese: '结束年份', columnsDef: 'endYear', cell: (row: ThreeLevelResult) => `${row.endYear}`},
+            {columnsHeaderChinese: '数据', columnsDef: 'data', cell: (row: ThreeLevelResult) => `${row.data}`},
+            {columnsHeaderChinese: '单位', columnsDef: 'unit', cell: (row: ThreeLevelResult) => `${row.unit}`},
+          ],
+          field: ['gazetteerName', 'gazetteerId', 'category1', 'category2', 'category3', 'startYear', 'endYear', 'data', 'unit'],
+          data: result[6].data,
+          treeFilter: this.filterService.filterItem(result[6].filter_2),
+          topic: "economy",
+          id: choose.id,
+        },
         {
             tableNameChinese: '计划生育',
             columnsName: [
@@ -280,19 +184,9 @@ export class SingleVillageSearchResultService {
                 ],
             field: ['gazetteerName','gazetteerId','category1','startYear','endYear','data','unit'],
             data: result[7].data,
-            treeFilter:{
-              计划生育率: null,
-              节育率: null,
-              结扎总数: null,
-              绝育手术: null,
-              领取独生子女证人数: null,
-              男性结扎: null,
-              女性结扎: null,
-              人工流产: null,
-              上环: null,
-              引产: null,
-              育龄妇女人口: null,
-            },
+            treeFilter:this.filterService.filterItem(result[7].filter_2),
+          topic: "familyplanning",
+          id: choose.id,
           },
         {
             tableNameChinese: '人口',
@@ -308,47 +202,9 @@ export class SingleVillageSearchResultService {
             ],
             field: ['gazetteerName','gazetteerId','category1','category2','startYear','endYear','data','unit'],
             data: result[8].data,
-            treeFilter:{
-              出生人数: null,
-              户数: null,
-              流动人口: null,
-              '死亡率 Death Rate (%)': null,
-              '死亡率 Death Rate (‰)': null,
-              死亡人数: null,
-              '自然出生率 Birth Rate (%)': null,
-              '自然出生率 Birth Rate (‰)': null,
-              '自然增长率 Natural Population Growth Rate (%)': null,
-              '自然增长率 Natural Population Growth Rate (‰)': null,
-              残疾人数: {
-                精神残疾: null,
-                听力语言残疾: null,
-                肢体残疾: null,
-                智力残疾: null,
-                视力残疾: null,
-                残疾人总数: null,
-              },
-              农转非:{
-                人数: null,
-                户数: null,
-              },
-              迁入:{
-                人数: null,
-                户数: null,
-                知识青年: null,
-              },
-              迁出:{
-                人数: null,
-                户数: null,
-                知识青年: null,
-              },
-              人口:{
-                总人口: null,
-                男性人口: null,
-                女性人口: null,
-              }
-
-
-            }
+            treeFilter:this.filterService.filterItem(result[8].filter_2),
+            topic: "population",
+            id: choose.id,
           },
         {
             tableNameChinese: '民族',
@@ -363,12 +219,15 @@ export class SingleVillageSearchResultService {
             ],
             field: ['gazetteerName','gazetteerId','category1','startYear','endYear','data','unit'],
             data: result[9].data,
-            multiselectFilter: [ '汉族', '壮族', '回族', '满族', '维吾尔族', '苗族', '彝族', '土家族', '藏族',
-              '蒙古族', '侗族', '布依族', '瑶族', '白族', '朝鲜族', '哈尼族', '黎族', '哈萨克族', '傣族', '畲族',
-              '傈僳族', '东乡族', '仡佬族', '拉祜族', '佤族', '水族', '纳西族', '羌族', '土族', '仫佬族',
-              '锡伯族', '柯尔克孜族', '景颇族', '达斡尔族', '撒拉族', '布朗族', '毛南族', '塔吉克族', '普米族', '阿昌族',
-              '怒族', '鄂温克族', '京族', '基诺族', '德昂族', '保安族', '俄罗斯族', '裕固族', '乌兹别克族', '门巴族',
-              '鄂伦春族', '独龙族', '赫哲族', '高山族', '珞巴族', '塔塔尔族', '少数民族 (总)' ],
+            treeFilter:{},
+            // multiselectFilter: [ '汉族', '壮族', '回族', '满族', '维吾尔族', '苗族', '彝族', '土家族', '藏族',
+            //   '蒙古族', '侗族', '布依族', '瑶族', '白族', '朝鲜族', '哈尼族', '黎族', '哈萨克族', '傣族', '畲族',
+            //   '傈僳族', '东乡族', '仡佬族', '拉祜族', '佤族', '水族', '纳西族', '羌族', '土族', '仫佬族',
+            //   '锡伯族', '柯尔克孜族', '景颇族', '达斡尔族', '撒拉族', '布朗族', '毛南族', '塔吉克族', '普米族', '阿昌族',
+            //   '怒族', '鄂温克族', '京族', '基诺族', '德昂族', '保安族', '俄罗斯族', '裕固族', '乌兹别克族', '门巴族',
+            //   '鄂伦春族', '独龙族', '赫哲族', '高山族', '珞巴族', '塔塔尔族', '少数民族 (总)' ],
+          topic: "ethnicgroups",
+          id: choose.id,
           },
         {
             tableNameChinese: '姓氏',
@@ -384,7 +243,10 @@ export class SingleVillageSearchResultService {
             ],
             field: ['gazetteerName','gazetteerId','firstLastNameId','secondLastNameId','thirdLastNameId','fourthLastNameId','fifthLastNameId','totalNumberOfLastNameInVillage'],
             data: result[10].data,
-            lastnameFilter:['杨', '邓', '叶', '赵', '孙'],
+            treeFilter:{},
+            //lastnameFilter:['杨', '邓', '叶', '赵', '孙'],
+          topic: "fourthlastNames",
+          id: choose.id,
           },
         {
             tableNameChinese: '第一次购买或拥有年份',
@@ -396,15 +258,9 @@ export class SingleVillageSearchResultService {
             ],
             field: ['gazetteerName','gazetteerId','category','year'],
             data:result[11].data,
-            treeFilter:{
-              液化气: null,
-              天然气: null,
-              管道燃气: null,
-              自来水: null,
-              供电: null,
-              电话机: null,
-              有线广播: null,
-            },
+            treeFilter: this.filterService.filterItem(result[11].filter_2),
+          topic: "firstavailabilityorpurchase",
+          id: choose.id,
           }
       ],
     }

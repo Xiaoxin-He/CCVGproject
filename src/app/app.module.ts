@@ -60,6 +60,8 @@ import { TableDisplayV2Component } from './table-display-V2/table-display-V2.com
 import { TableDisplayV22Component } from './table-display-v22/table-display-v22.component';
 import { TableDisplayV23Component } from './table-display-v23/table-display-v23.component';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
+import { SingleVillageSearchV2Component } from './single-village-search-v2/single-village-search-v2.component';
+import { TableDetailComponent } from './table-detail/table-detail.component';
 
 
 @NgModule({
@@ -72,6 +74,8 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
     TableDisplayV2Component,
     TableDisplayV22Component,
     TableDisplayV23Component,
+    SingleVillageSearchV2Component,
+    TableDetailComponent,
   ],
   imports: [
     HttpClientModule,

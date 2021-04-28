@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-
 import {
   VillageNameService,
   Village,
@@ -10,11 +9,12 @@ import {
 import {SingleVillageSearchResultService,} from '../services/single-village-search-result.service';
 
 @Component({
-  selector: 'app-single-village-search',
-  templateUrl: './single-village-search.component.html',
-  styleUrls: ['./single-village-search.component.css']
+  selector: 'app-single-village-search-v2',
+  templateUrl: './single-village-search-v2.component.html',
+  styleUrls: ['./single-village-search-v2.component.css']
 })
-export class SingleVillageSearchComponent implements OnInit {
+export class SingleVillageSearchV2Component implements OnInit {
+
   myControl = new FormControl();
 
   options: Village[] = [];
@@ -25,6 +25,8 @@ export class SingleVillageSearchComponent implements OnInit {
 
   searchResult: TableData[];
   display: boolean = false;
+
+  selectedTable: any = [];
 
   constructor(private villageNameService: VillageNameService,
               private villageSearchResultService: SingleVillageSearchResultService) {
@@ -69,5 +71,10 @@ export class SingleVillageSearchComponent implements OnInit {
     console.log("this is the searchResult", this.searchResult);
 
     this.display = true;
+  }
+
+  onSelect(table: TableData) {
+    this.selectedTable = table;
+    console.log("selected table: ",this.selectedTable);
   }
 }

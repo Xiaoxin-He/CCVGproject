@@ -1,12 +1,14 @@
 <div class="flexcontainer">
   <div class="container1">Select Villages-选择村庄
     <div class="geologyDropdownList">
-      <button mat-button [matMenuTriggerFor]="province">Province-省&nbsp;<i class="arrowdown"></i></button>
-      <mat-menu #province="matMenu">
-        <button mat-menu-item>河南省</button>
-        <button mat-menu-item>河北省</button>
-        <button mat-menu-item>湖北省</button>
-      </mat-menu>
+      <mat-form-field>
+        <mat-label>Province</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let province of provinceList" [value]="province">
+            {{province}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
       <button mat-button [matMenuTriggerFor]="city">City-市&nbsp;<i class="arrowdown"></i></button>
       <mat-menu #city="matMenu">
@@ -89,7 +91,7 @@
           <div class="economy">
             <div class="category">
               <div class="left">类别1-Category1
-                <mat-checkbox (change)="log($event)">选择所有</mat-checkbox>
+<!--                <mat-checkbox (change)="log($event)">选择所有</mat-checkbox>-->
                 <mat-checkbox>总产值</mat-checkbox>
                 <mat-checkbox>集体经济</mat-checkbox>
               </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Village, VillageNameService} from '../services/village-name.service';
 import {MatCheckboxChange} from '@angular/material/checkbox';
+import {ProvinceCityCountyService}from '../services/province-city-county.service';
 
 @Component({
   selector: 'app-multi-village-search',
@@ -11,7 +12,11 @@ export class MultiVillageSearchComponent implements OnInit {
   options: any[];
   displayedColumns: string[] = ['checked','name', 'province', 'city', 'county'];
 
-  constructor(private villageService: VillageNameService) {
+  all: Array<Object>;
+  provinceList: string[];
+
+  constructor(private villageService: VillageNameService,
+              private provinceCityCountyService: ProvinceCityCountyService) {
     this.options = [
       {checked: false, name: '太平店村', province: '河南省', city: '许昌市', county: '长葛市'},
       {checked: false, name: '太各庄村', province: '河北省', city: '唐山市', county: '丰南区'},
@@ -25,12 +30,12 @@ export class MultiVillageSearchComponent implements OnInit {
 
     ];
 
+    this.provinceList = this.provinceCityCountyService.getAll();
+
   }
 
   ngOnInit(): void {
   }
 
-  log($event: MatCheckboxChange) {
-    $event.checked;
-  }
+
 }

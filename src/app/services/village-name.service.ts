@@ -56,7 +56,10 @@ export interface TableData {
   columnsName: ColumnsFormat[];
   field: string[];
   data: any[];
-  // tableDataEmpty: boolean; //check if this table is empty
+
+  topic: string;
+  id: any;
+  tableIsEmpty?: boolean; // check if the table is empty
   // table-display-V2
   treeFilter?: any;
   // table-display-v22

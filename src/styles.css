@@ -4,3 +4,21 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-checkbox-layout {
+  white-space: normal !important;
+}
+
+.mat-tree cdk-tree{
+  position: sticky;
+}
+
+/*.mat-list.mat-list.mat-list-base {*/
+/*  background: chocolate;*/
+/*  position: fixed;*/
+/*}*/
+
+.mat-tree.mat-tree.cdk-tree {
+  position: sticky !important;
+  top: 58px;
+}

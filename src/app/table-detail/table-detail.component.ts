@@ -1,21 +1,16 @@
-import {SelectionModel} from '@angular/cdk/collections';
-import {FlatTreeControl} from '@angular/cdk/tree';
 import {Component, Input, OnInit} from '@angular/core';
+import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import {SelectionModel} from '@angular/cdk/collections';
 import {TableData} from '../services/village-name.service';
 import {debounceTime} from 'rxjs/operators';
 
-
-/**
- * @title Tree with checkboxes
- */
-
 @Component({
-  selector: 'app-table-display-V2',
-  templateUrl: './table-display-V2.component.html',
-  styleUrls: ['./table-display-V2.css'],
+  selector: 'app-table-detail',
+  templateUrl: './table-detail.component.html',
+  styleUrls: ['./table-detail.component.css']
 })
-export class TableDisplayV2Component implements OnInit {
+export class TableDetailComponent implements OnInit {
   dataChange: TodoItemNode[];
 
   flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
@@ -35,7 +30,37 @@ export class TableDisplayV2Component implements OnInit {
 
   filteredList: any;
   fulllist: any;
-  @Input('tabledata') table: TableData; //note: @Input property 必须要使用在OnInit里面才可以,constructor里面会报错
+  downloadTopic: string;
+  downloadVillageId: any;
+
+
+  @Input('tabledata') set table(table: TableData) {
+    this._table = table;
+    //console.log(table);
+    this.filteredList = table.data;
+    this.fulllist = this.table.data;
+
+
+    this.dataChange = this.buildFileTree(this._table.treeFilter, 0);
+    this.dataSource.data = this.dataChange;
+
+    this.downloadVillageId = table.id;
+    this.downloadTopic = table.topic;
+    console.log("this.downloadVillageId",this.downloadVillageId);
+    this.downloadLink = "http://ngrok.luozm.me:8395/ccvg/download"+"/"+this.downloadVillageId+"_"+this.downloadTopic+".csv";
+
+  } //note: @Input property 必须要使用在OnInit里面才可以,constructor里面会报错
+
+  _table: TableData
+
+  downloadLink: any;
+
+
+  get table():TableData {
+    return this._table
+  }
+
+
 
   constructor() {
     // 一个含有4个function的object
@@ -46,6 +71,10 @@ export class TableDisplayV2Component implements OnInit {
     this.treeControl = new FlatTreeControl<TodoItemFlatNode>(this.getLevel, this.isExpandable);
     //console.log("treeControl",this.treeControl);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+
+    // this.downloadVillageId = this._table.id;
+    // console.log("this.downloadVillageId",this.downloadVillageId);
+    // this.downloadLink = "http://ngrok.luozm.me:8395/ccvg/download"+this.downloadVillageId+"_"+this.downloadTopic+".csv";
   }
 
   getLevel = (node: TodoItemFlatNode) => node.level;
@@ -138,6 +167,7 @@ export class TableDisplayV2Component implements OnInit {
   }
 
   /* Get the parent node of a node */
+
   getParentNode(node: TodoItemFlatNode): TodoItemFlatNode | null {
     const currentLevel = this.getLevel(node);
 
@@ -181,13 +211,14 @@ export class TableDisplayV2Component implements OnInit {
   }
 
   ngOnInit(): void {
-    //console.log("this.table from table-display-V2", this.table);
-    this.dataChange = this.buildFileTree(this.table.treeFilter, 0);
-    this.dataSource.data = this.dataChange;
-
-    this.filteredList = this.table.data;
-    this.fulllist = this.table.data;
-    console.log("tble display V2 this.table",this.table);
+    console.log("this.table from table-detail", this.table);
+    //this.downloadLink = "http://ngrok.luozm.me:8395/ccvg/download/"+
+    // this.dataChange = this.buildFileTree(this.table.treeFilter, 0);
+    // this.dataSource.data = this.dataChange;
+    //
+    // this.filteredList = this.table.data;
+    // this.fulllist = this.table.data;
+    //console.log("tble display V2 this.table",this.table);
 
     this.checklistSelection.changed.pipe(
       debounceTime(10)
@@ -203,12 +234,12 @@ export class TableDisplayV2Component implements OnInit {
         for(let node of selected){
           // category 1
           if(node.level == 0 && row.category1.includes(node.description)){
-              return true;
+            return true;
           }
           // category 2
           if(node.level == 1){
             if(row.category1.includes(this.getParentNode(node).description)
-               && row.category2.includes(node.description)){
+              && row.category2.includes(node.description)){
               return true;
             }
           }
@@ -217,8 +248,8 @@ export class TableDisplayV2Component implements OnInit {
             let cat2 = this.getParentNode(node);
             let cat1 = this.getParentNode(cat2);
             if(row.category1.includes(cat1.description)
-               && row.category2.includes(cat2.description)
-               && row.category3.includes(node.description)){
+              && row.category2.includes(cat2.description)
+              && row.category3.includes(node.description)){
               return true;
             }
 
@@ -253,5 +284,6 @@ export class TodoItemFlatNode {
   expandable: boolean;
   type: string;
 }
+
 
 

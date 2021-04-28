@@ -20,6 +20,8 @@ export class TableDisplayV22Component implements OnInit {
     this.fullList = this.table.data;
     this.filteredList = this.fullList;
 
+    console.log("this.filteredList",this.filteredList.length);
+
     this.ethnicGroups.valueChanges.subscribe(value=>{
       console.log("value",value);
 

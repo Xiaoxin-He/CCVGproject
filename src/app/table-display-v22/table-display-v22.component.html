@@ -13,6 +13,7 @@
   </mat-select>
 </mat-form-field>
 
+<div *ngIf="filteredList.length>0">
 <table cdk-table [dataSource]="filteredList">
   <ng-container *ngFor="let column of table.columnsName" [cdkColumnDef]="column.columnsDef">
     <th cdk-header-cell *cdkHeaderCellDef>{{ column.columnsHeaderChinese }}</th>
@@ -22,5 +23,8 @@
   <tr cdk-header-row *cdkHeaderRowDef="table.field"></tr>
   <tr cdk-row *cdkRowDef="let row; columns: table.field"></tr>
 </table>
-
+</div>
+  <div *ngIf="filteredList.length == 0">
+    <p>This table is empty.</p>
+  </div>
 </mat-expansion-panel>
