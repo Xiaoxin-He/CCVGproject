@@ -42,12 +42,6 @@ export class SingleVillageSearchResultService {
     }
     console.log("result ",result);
 
-    // 进行后端传回来的filter的处理，不写死filter
-    //console.log('print military filter',this.filterService.militaryFilterItem(result[4].filter));
-    //console.log("result[4].filter",result[4].filter);
-
-
-
     return {
       tables:[
         { // table1
@@ -67,6 +61,7 @@ export class SingleVillageSearchResultService {
           field: ['gazetteerId','gazetteerName','villageId','villageName','province','city','county','category1','data','unit'],
           data: result[0].data,
           treeFilter:{},
+          //download
           topic:"village",
           id: choose.id,
         }, // end of table 1
