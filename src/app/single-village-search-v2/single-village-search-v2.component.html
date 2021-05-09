@@ -31,24 +31,9 @@
   </form>
 </div>
 <!--<h2>single village search result v2</h2>-->
-<div class="searchResult" *ngIf="searchResult">
-  <div class="master">
-    <mat-list role="list">
-      <mat-list-item *ngFor="let table of searchResult"
-                     (click)="onSelect(table)"
-                     [class.selected] = "table === selectedTable">
-        {{table.tableNameChinese}}
-      </mat-list-item>
-    </mat-list>
-  </div>
-
-
-  <div class="detail"
-       *ngIf="selectedTable.treeFilter">
-    <app-table-detail [tabledata]="selectedTable"></app-table-detail>
-  </div>
-
-</div>
+<!--<div class="searchResult" *ngIf="searchResult">-->
+<!--  <button (click)="goToComponentB()">Go to B</button>-->
+<!--</div>-->
 
 
 

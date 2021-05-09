@@ -3,7 +3,6 @@
   <div class="tableFilter">
     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
-        <button mat-icon-button disabled></button>
         <mat-checkbox class="checklist-leaf-node"
                       [checked]="checklistSelection.isSelected(node)"
                       (change)="todoLeafItemSelectionToggle(node)">
@@ -25,6 +24,8 @@
         </mat-checkbox>
       </mat-tree-node>
     </mat-tree>
+    <br><br><br>
+<!--    <a [href]=downloadLink download>Download</a>-->
   </div>
 
   <div class="tableData">
@@ -45,5 +46,5 @@
     </div>
   </div>
 
-  <a [href]=downloadLink download>Download</a>
+
 </div>

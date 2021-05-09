@@ -13,14 +13,15 @@
   flex-wrap: wrap;
 
   /*background: chartreuse;*/
-  flex-basis: 0;
-  flex-grow: 0;
+  /*flex-basis: 0;*/
+  /*flex-grow: 0;*/
 
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  top: 0;
 
-  width: 150px !important;
+  overflow-y: scroll;
+  height: 100vh;
+
+  font-size: 10px !important;
+  width: 180px !important;
 
 }
 
@@ -29,8 +30,11 @@
   flex-direction: column;
 
   /*background: blue;*/
-  flex-grow: 10;
+  /*flex-grow: 10;*/
   /*width: 80%;*/
+
+  overflow-y: scroll;
+  height: 100vh;
 }
 
 .mat-checkbox-layout {

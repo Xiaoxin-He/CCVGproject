@@ -62,6 +62,7 @@ import { TableDisplayV23Component } from './table-display-v23/table-display-v23.
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import { SingleVillageSearchV2Component } from './single-village-search-v2/single-village-search-v2.component';
 import { TableDetailComponent } from './table-detail/table-detail.component';
+import { SingleVillageSearchResultComponent } from './single-village-search-result/single-village-search-result.component';
 
 
 @NgModule({
@@ -76,6 +77,7 @@ import { TableDetailComponent } from './table-detail/table-detail.component';
     TableDisplayV23Component,
     SingleVillageSearchV2Component,
     TableDetailComponent,
+    SingleVillageSearchResultComponent,
   ],
   imports: [
     HttpClientModule,
@@ -85,6 +87,12 @@ import { TableDetailComponent } from './table-detail/table-detail.component';
 
     FormsModule,
     ReactiveFormsModule,
+
+    RouterModule.forRoot([
+      {path: 'single-village-search',component:SingleVillageSearchV2Component},
+      {path: 'single-village-search-result', component:SingleVillageSearchResultComponent},
+      {path: '', redirectTo: '/single-village-search', pathMatch: 'full'},
+    ]),
 
     A11yModule,
     ClipboardModule,

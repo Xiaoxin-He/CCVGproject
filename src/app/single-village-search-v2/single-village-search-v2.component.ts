@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import {Router, RouterModule} from '@angular/router';
 import {
   VillageNameService,
   Village,
@@ -7,6 +8,7 @@ import {
   VillageNameDisplay,
 } from '../services/village-name.service';
 import {SingleVillageSearchResultService,} from '../services/single-village-search-result.service';
+import {StateServiceService} from '../services/state-service.service';
 
 @Component({
   selector: 'app-single-village-search-v2',
@@ -28,8 +30,11 @@ export class SingleVillageSearchV2Component implements OnInit {
 
   selectedTable: any = [];
 
+
   constructor(private villageNameService: VillageNameService,
-              private villageSearchResultService: SingleVillageSearchResultService) {
+              private villageSearchResultService: SingleVillageSearchResultService,
+              private stateService: StateServiceService,
+              private router: Router) {
 
   }
 
@@ -64,17 +69,25 @@ export class SingleVillageSearchV2Component implements OnInit {
   }
 
   async search(choose: Village): Promise<void>{
-    // console.log("onkeyup");
     console.log("choose ", choose);
     this.searchResult = (await this.villageSearchResultService.searchEncap(choose)).tables;
-    //console.log("here is the this.searcResult[0].data");
     console.log("this is the searchResult", this.searchResult);
 
     this.display = true;
+
+    // router go to single-village-search-result page
+    this.stateService.data = this.searchResult;
+    this.router.navigate(['/single-village-search-result']);
   }
 
   onSelect(table: TableData) {
     this.selectedTable = table;
     console.log("selected table: ",this.selectedTable);
   }
+
+  async goToComponentB(): Promise<void> {
+
+  }
+
+
 }
