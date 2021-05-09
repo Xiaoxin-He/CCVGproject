@@ -32,10 +32,11 @@ export class SingleVillageSearchResultService {
     const result: any[] = []
     for(let x of topics) {
 
+      //ccvg/search
       let response = await this.httpService.post('ccvg/search',{"villageid":choose.id, "topic": x})
                                            .catch((err: HttpErrorResponse) => {
                                              // simple logging, but you can do a lot more, see below
-                                             console.error('An error occurred:', err.error.text);
+                                            //  console.error('An error occurred:', err.error.text);
                                              return {data:[]};
                                            });
       result.push(<TableData> response);

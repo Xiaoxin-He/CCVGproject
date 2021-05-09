@@ -122,5 +122,8 @@
       }
     }
   },
-  "defaultProject": "CCVGproject"
+  "defaultProject": "CCVGproject",
+  "cli": {
+    "analytics": "d4578ffd-20c1-40f7-bb78-6a43c2a7761a"
+  }
 }
