@@ -1,27 +1,47 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import {Router, RouterModule} from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {
   VillageNameService,
   Village,
   TableData,
   VillageNameDisplay,
 } from '../services/village-name.service';
-import {SingleVillageSearchResultService,} from '../services/single-village-search-result.service';
-import {StateServiceService} from '../services/state-service.service';
+import { SingleVillageSearchResultService } from '../services/single-village-search-result.service';
+import { StateServiceService } from '../services/state-service.service';
 
 @Component({
   selector: 'app-single-village-search-v2',
   templateUrl: './single-village-search-v2.component.html',
-  styleUrls: ['./single-village-search-v2.component.css']
+  styleUrls: ['./single-village-search-v2.component.css'],
 })
 export class SingleVillageSearchV2Component implements OnInit {
-
   myControl = new FormControl();
+
+  value = '输入村名，如‘太平店村’ ';
 
   options: Village[] = [];
   filteredOptions: Village[] = [];
-  temp: VillageNameDisplay;
+  temp: VillageNameDisplay = {
+    data: [
+      {
+        isSelected: false /*ui: backend dont need*/,
+        name: 'string',
+        province: 'string',
+        city: 'string',
+        county: 'string',
+        id: 'string',
+      },
+      {
+        isSelected: false /*ui: backend dont need*/,
+        name: 'string2',
+        province: 'string2',
+        city: 'string2',
+        county: 'string2',
+        id: 'string2',
+      },
+    ],
+  };
 
   choose: Village;
 
@@ -30,64 +50,66 @@ export class SingleVillageSearchV2Component implements OnInit {
 
   selectedTable: any = [];
 
+  constructor(
+    private villageNameService: VillageNameService,
+    private villageSearchResultService: SingleVillageSearchResultService,
+    private stateService: StateServiceService,
+    private router: Router
+  ) {}
 
-  constructor(private villageNameService: VillageNameService,
-              private villageSearchResultService: SingleVillageSearchResultService,
-              private stateService: StateServiceService,
-              private router: Router) {
-
-  }
-
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.init();
   }
 
-  async init(){
+  async init() {
     this.temp = await this.villageNameService.getVillages();
-    this.filteredOptions =  this.temp.data;
+    this.filteredOptions = this.temp.data;
     this.options = this.filteredOptions;
-    console.log("this.filteredOptions",this.filteredOptions);
+    console.log('this.filteredOptions', this.filteredOptions);
   }
 
   async filter(value: string) {
-    if(value === ""){
+    if (value === '') {
       await this.init();
-    }
-    else{
+    } else {
       const filterValue = value;
       console.log('filterValue', filterValue);
       this.temp = await this.villageNameService.filterVillages(value);
-      console.log("this.temp",this.temp);
-      this.filteredOptions =  this.temp.data;
+      console.log('this.temp', this.temp);
+      this.filteredOptions = this.temp.data;
       //this.filteredOptions = this.options.filter(option => option.name.includes(filterValue));
     }
-
   }
 
-  displayFn(village): string{
+  displayFn(village): string {
     return village ? village.name : '';
   }
 
-  async search(choose: Village): Promise<void>{
-    console.log("choose ", choose);
-    this.searchResult = (await this.villageSearchResultService.searchEncap(choose)).tables;
-    console.log("this is the searchResult", this.searchResult);
+  async search(choose: Village): Promise<void> {
+    console.log('choose ', choose);
+    this.searchResult = (
+      await this.villageSearchResultService.searchEncap(choose)
+    ).tables;
+    console.log('this is the searchResult', this.searchResult);
 
     this.display = true;
 
     // router go to single-village-search-result page
     this.stateService.data = this.searchResult;
+
+    window.localStorage.setItem(
+      'result',
+      JSON.stringify(this.stateService.data)
+    );
+
+    console.log('🧸 ' + JSON.stringify(this.stateService.data));
     this.router.navigate(['/single-village-search-result']);
   }
 
   onSelect(table: TableData) {
     this.selectedTable = table;
-    console.log("selected table: ",this.selectedTable);
+    console.log('selected table: ', this.selectedTable);
   }
 
-  async goToComponentB(): Promise<void> {
-
-  }
-
-
+  async goToComponentB(): Promise<void> {}
 }
