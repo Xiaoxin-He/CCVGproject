@@ -62,7 +62,7 @@ export class SingleVillageSearchV2Component implements OnInit {
   }
 
   async init() {
-    this.temp = await this.villageNameService.getVillages();
+    // this.temp = await this.villageNameService.getVillages();
     this.filteredOptions = this.temp.data;
     this.options = this.filteredOptions;
     console.log('this.filteredOptions', this.filteredOptions);
@@ -74,7 +74,7 @@ export class SingleVillageSearchV2Component implements OnInit {
     } else {
       const filterValue = value;
       console.log('filterValue', filterValue);
-      this.temp = await this.villageNameService.filterVillages(value);
+      // this.temp = await this.villageNameService.filterVillages(value);
       console.log('this.temp', this.temp);
       this.filteredOptions = this.temp.data;
       //this.filteredOptions = this.options.filter(option => option.name.includes(filterValue));
@@ -87,15 +87,15 @@ export class SingleVillageSearchV2Component implements OnInit {
 
   async search(choose: Village): Promise<void> {
     console.log('choose ', choose);
-    this.searchResult = (
-      await this.villageSearchResultService.searchEncap(choose)
-    ).tables;
+    // this.searchResult = (
+    //   await this.villageSearchResultService.searchEncap(choose)
+    // ).tables;
     console.log('this is the searchResult', this.searchResult);
 
     this.display = true;
 
     // router go to single-village-search-result page
-    this.stateService.data = this.searchResult;
+    // this.stateService.data = this.searchResult;
 
     window.localStorage.setItem(
       'result',
