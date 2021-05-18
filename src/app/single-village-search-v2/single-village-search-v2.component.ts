@@ -97,12 +97,15 @@ export class SingleVillageSearchV2Component implements OnInit {
     // router go to single-village-search-result page
     // this.stateService.data = this.searchResult;
 
-    window.localStorage.setItem(
-      'result',
-      JSON.stringify(this.stateService.data)
-    );
+    if (this.stateService.data) {
+      window.localStorage.setItem(
+        'result',
+        JSON.stringify(this.stateService.data)
+      );
+    } else {
+      console.log('😨 no stateService data or search results');
+    }
 
-    console.log('🧸 ' + JSON.stringify(this.stateService.data));
     this.router.navigate(['/single-village-search-result']);
   }
 

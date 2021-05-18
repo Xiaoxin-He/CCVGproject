@@ -685,13 +685,16 @@ export class SingleVillageSearchResultComponent implements OnInit {
     // console.log('🛋 this.searchResult' + this.searchResult);
 
     // !!! local storage
-    // this.searchResult = JSON.parse(window.localStorage.getItem('result'));
+    this.searchResult = JSON.parse(window.localStorage.getItem('result'));
+    console.log(
+      `here are the fake date for search result 👌🏻 : \n ${JSON.stringify(
+        this.searchResult
+      )}`
+    );
     // console.log(typeof this.selectedTable);
 
     // mock data
     this.searchResult = this.tables;
-
-    console.log(this.searchResult);
 
     this.selectedTable = this.searchResult[0];
   }
