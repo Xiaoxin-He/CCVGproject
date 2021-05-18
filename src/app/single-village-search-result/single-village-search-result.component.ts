@@ -1,3 +1,4 @@
+import { Village } from './../services/village-name.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   BasicGazetteerInformation,
@@ -684,26 +685,30 @@ export class SingleVillageSearchResultComponent implements OnInit {
     // this.searchResult = this.stateService.data;
     // console.log('🛋 this.searchResult' + this.searchResult);
 
-    // !!! local storage
-    this.searchResult = JSON.parse(window.localStorage.getItem('result'));
-    console.log(
-      `here are the fake date for search result 👌🏻 : \n ${JSON.stringify(
-        this.searchResult
-      )}`
-    );
+    // !!! BUG local storage - solve CORS policy issue
+    // this.searchResult = JSON.parse(window.localStorage.getItem('result'));
+    // console.log(
+    //   `here are the fake date for search result 👌🏻 : \n ${JSON.stringify(
+    //     this.searchResult
+    //   )}`
+    // );
     // console.log(typeof this.selectedTable);
+    //this.selectedTable = this.searchResult[0];
 
     // mock data
-    this.searchResult = this.tables;
+    // this.searchResult = this.tables;
 
-    this.selectedTable = this.searchResult[0];
+    //BUG comment out the follow two lines
+    this.choose = JSON.parse(window.localStorage.getItem('choose'));
+    this.search(this.choose);
   }
 
-  // async search(): Promise<void> {
-  //   this.searchResult = (
-  //     await this.villageSearchResultService.searchEncap(this.choose)
-  //   ).tables;
-  // }
+  search(choose: Village) {
+    this.villageSearchResultService.searchEncap(choose).then((res) => {
+      this.searchResult = res.tables;
+      this.selectedTable = this.searchResult[0];
+    });
+  }
 
   onSelect(table: TableData) {
     this.selectedTable = table;

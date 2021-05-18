@@ -1,4 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChange,
+  SimpleChanges,
+} from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
   MatTreeFlatDataSource,
@@ -39,17 +46,18 @@ export class TableDetailComponent implements OnInit {
   downloadVillageId: any;
 
   @Input('tabledata') set table(table: TableData) {
+    if (table === undefined) return;
     console.log(this);
     this._table = table;
-    //console.log(table);
+
     this.filteredList = table.data;
     this.fulllist = this.table.data;
 
     this.dataChange = this.buildFileTree(this._table.treeFilter, 0);
     this.dataSource.data = this.dataChange;
 
-    this.downloadVillageId = table.id;
-    this.downloadTopic = table.topic;
+    this.downloadVillageId = table?.id;
+    this.downloadTopic = table?.topic;
     console.log('this.downloadVillageId', this.downloadVillageId);
     this.downloadLink =
       'http://ngrok.luozm.me:8395/ccvg/download' +

@@ -62,7 +62,7 @@ export class SingleVillageSearchV2Component implements OnInit {
   }
 
   async init() {
-    // this.temp = await this.villageNameService.getVillages();
+    this.temp = await this.villageNameService.getVillages();
     this.filteredOptions = this.temp.data;
     this.options = this.filteredOptions;
     console.log('this.filteredOptions', this.filteredOptions);
@@ -74,10 +74,12 @@ export class SingleVillageSearchV2Component implements OnInit {
     } else {
       const filterValue = value;
       console.log('filterValue', filterValue);
-      // this.temp = await this.villageNameService.filterVillages(value);
+      this.temp = await this.villageNameService.filterVillages(value);
       console.log('this.temp', this.temp);
       this.filteredOptions = this.temp.data;
-      //this.filteredOptions = this.options.filter(option => option.name.includes(filterValue));
+      this.filteredOptions = this.options.filter((option) =>
+        option.name.includes(filterValue)
+      );
     }
   }
 
@@ -85,26 +87,30 @@ export class SingleVillageSearchV2Component implements OnInit {
     return village ? village.name : '';
   }
 
-  async search(choose: Village): Promise<void> {
+  // async search(choose: Village): Promise<void>
+  search(choose: Village) {
     console.log('choose ', choose);
     // this.searchResult = (
     //   await this.villageSearchResultService.searchEncap(choose)
     // ).tables;
-    console.log('this is the searchResult', this.searchResult);
+    // console.log('this is the searchResult', this.searchResult);
 
     this.display = true;
 
     // router go to single-village-search-result page
+    // BUG do not use stateService
     // this.stateService.data = this.searchResult;
 
-    if (this.stateService.data) {
-      window.localStorage.setItem(
-        'result',
-        JSON.stringify(this.stateService.data)
-      );
-    } else {
-      console.log('😨 no stateService data or search results');
-    }
+    // if (this.stateService.data) {
+    //   window.localStorage.setItem(
+    //     'result',
+    //     JSON.stringify(this.stateService.data)
+    //   );
+    // } else {
+    //   console.log('😨 no stateService data or search results');
+    // }
+
+    window.localStorage.setItem('choose', JSON.stringify(choose));
 
     this.router.navigate(['/single-village-search-result']);
   }
