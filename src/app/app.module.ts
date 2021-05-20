@@ -63,6 +63,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SingleVillageSearchV2Component } from './single-village-search-v2/single-village-search-v2.component';
 import { TableDetailComponent } from './table-detail/table-detail.component';
 import { SingleVillageSearchResultComponent } from './single-village-search-result/single-village-search-result.component';
+import { SearchMultiVillagesComponent } from './search-multi-villages/search-multi-villages.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { SingleVillageSearchResultComponent } from './single-village-search-resu
     SingleVillageSearchV2Component,
     TableDetailComponent,
     SingleVillageSearchResultComponent,
+    SearchMultiVillagesComponent,
   ],
   imports: [
     HttpClientModule,
