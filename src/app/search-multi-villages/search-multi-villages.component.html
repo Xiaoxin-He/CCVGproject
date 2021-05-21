@@ -32,6 +32,26 @@
 
         </div>
 
+        <div>Village Name: <input type="text" [(ngModel)]="villageSearch"></div>
+        <div>Province Name: <input type="text" [(ngModel)]="provinceSearch"></div>
+        <div>City Name: <input type="text" [(ngModel)]="citySearch"></div>
+        <div>County Name: <input type="text" [(ngModel)]="countySearch"></div>
+
+        <table>
+            <tr>
+                <th>province name</th>
+            </tr>
+            <tr *ngFor="let total of totalList | villagesearch: provinceSearch: citySearch: countySearch: villageSearch">
+                <td>{{total.name}}</td>
+                <td>{{total.province}}</td>
+                <td>{{total.city}}</td>
+                <td>{{total.county}}</td>
+            </tr>
+        </table>
+
+
+
+        <br><br>
         <mat-form-field>
             <mat-label>按村名筛选， 例如太平村</mat-label>
             <input matInput (keyup)="applyFilter($event)" #input>

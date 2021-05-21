@@ -18,6 +18,11 @@ export class SearchMultiVillagesComponent implements OnInit {
   displayedColumns: string[] = ['checked','name', 'province', 'city', 'county'];
   dataSource;
   selectedValue: string;
+  provinceSearch: string;
+  citySearch: string;
+  countySearch: string;
+  villageSearch: string;
+  totalList: any = {};
 
   constructor(private villageNameService: VillageNameService,
     private provinceCityCountyService: ProvinceCityCountyService) {
@@ -28,8 +33,7 @@ export class SearchMultiVillagesComponent implements OnInit {
 
   ngOnInit(): void {
     this.villageNameService.getVillages().then(result =>{
-      console.log(result);
-      console.log(result.data[69].province);
+      this.totalList = result.data;
       result.data.map(item =>{
         if(this.cityList.includes(item.city) === false) {
           this.cityList.push(item.city);
@@ -37,11 +41,11 @@ export class SearchMultiVillagesComponent implements OnInit {
         }
       })
       // console.log(result.data[0].city);
-      console.log(this.countyList);
+      console.log(this.totalList);
+      // console.log(this.countyList);
       this.options = new MatTableDataSource(result.data);
     })
   }
-
 
 
   applyFilter(event: Event) {
