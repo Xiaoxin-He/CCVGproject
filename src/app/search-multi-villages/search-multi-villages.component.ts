@@ -10,8 +10,11 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class SearchMultiVillagesComponent implements OnInit {
   options;
+  //TODO this is fake data for province, need change later
   provinceList: any[];
+  //city and county got from database with 100 values
   cityList: string[] = [];
+  countyList: string[] = [];
   displayedColumns: string[] = ['checked','name', 'province', 'city', 'county'];
   dataSource;
   selectedValue: string;
@@ -30,13 +33,13 @@ export class SearchMultiVillagesComponent implements OnInit {
       result.data.map(item =>{
         if(this.cityList.includes(item.city) === false) {
           this.cityList.push(item.city);
+          this.countyList.push(item.county);
         }
       })
-      console.log(result.data[0].city);
-      console.log(this.cityList);
+      // console.log(result.data[0].city);
+      console.log(this.countyList);
       this.options = new MatTableDataSource(result.data);
     })
-    console.log(this.provinceList);
   }
 
 
@@ -53,6 +56,10 @@ export class SearchMultiVillagesComponent implements OnInit {
   }
 
   changeCity(data: Event) {
+    this.options.filter = data;
+  }
+
+  changeCounty(data) {
     this.options.filter = data;
   }
 

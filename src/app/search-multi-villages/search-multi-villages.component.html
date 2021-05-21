@@ -21,12 +21,14 @@
                 </mat-select>
             </mat-form-field>
 
-            <button mat-button [matMenuTriggerFor]="county">County-县&nbsp;<i class="arrowdown"></i></button>
-            <mat-menu #county="matMenu">
-                <button mat-menu-item>长葛市</button>
-                <button mat-menu-item>丰南区</button>
-                <button mat-menu-item>林州区</button>
-            </mat-menu>
+            <mat-form-field>
+                <mat-label>County 县</mat-label>
+                <mat-select [(ngModel)]="selectedValue" (ngModelChange)="changeCounty($event)">
+                    <mat-option *ngFor="let county of countyList" [value]="county">
+                        {{county}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
 
         </div>
 
