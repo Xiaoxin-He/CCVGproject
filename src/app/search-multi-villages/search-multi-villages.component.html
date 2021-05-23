@@ -36,7 +36,7 @@
         <div>Province Name: <input type="text" [(ngModel)]="provinceSearch"></div>
         <div>City Name: <input type="text" [(ngModel)]="citySearch"></div>
         <div>County Name: <input type="text" [(ngModel)]="countySearch"></div>
-
+        <!--
         <table>
             <tr>
                 <th>province name</th>
@@ -47,26 +47,26 @@
                 <td>{{total.city}}</td>
                 <td>{{total.county}}</td>
             </tr>
-        </table>
+        </table> -->
 
 
 
         <br><br>
         <mat-form-field>
-            <mat-label>按村名筛选， 例如太平村</mat-label>
+            <mat-label>按any筛选</mat-label>
             <input matInput (keyup)="applyFilter($event)" #input>
 
         </mat-form-field>
 
-        <div class="searchinput">
+        <!-- <div class="searchinput">
             <button class="nssx" mat-button [matMenuTriggerFor]="nssx">按村名筛选&nbsp;<i class="arrowdown"></i></button>
             <mat-menu #nssx="matMenu">
                 <button mat-menu-item>按市筛选</button>
                 <button mat-menu-item>按省筛选</button>
                 <button mat-menu-item>按县筛选</button>
             </mat-menu>
-            <!-- <input type="text" class="userinputtext"> -->
-        </div>
+            <input type="text" class="userinputtext">
+        </div> -->
 
         <br>
 
