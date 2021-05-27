@@ -13,12 +13,14 @@ export class VillagesearchPipe implements PipeTransform {
 
     if(items && items!= undefined) {
       console.log(typeof items);
-      return Object.values(items).filter(provinceName => {
+      return Object.values(items).filter(item => {
         // console.log(provinceName.city);
-        const villageName = provinceName.name;
-        const province = provinceName.province;
-        const city = provinceName.city;
-        const county = provinceName.county;
+        const villageName = item.name;
+        const province = item.province;
+        const city = item.city;
+        const county = item.county;
+
+        console.log(`${villageName} ${province} ${city} ${county}`);
         console.log(province);
         if(provinceSearch && province.indexOf(provinceSearch) === -1) {
           return false;

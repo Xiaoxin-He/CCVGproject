@@ -3,18 +3,18 @@
         <div class="geologyDropdownList">
             <mat-form-field>
                 <mat-label>Province 省</mat-label>
-                <mat-select [(ngModel)]="selectedValue" (ngModelChange)="changeProvince($event)">
+                <mat-select [(ngModel)]="provinceSearch" (ngModelChange)="changeProvince($event)">
                     <mat-option *ngFor="let province of provinceList" [value]="province">
                         {{province}}
                     </mat-option>
                 </mat-select>
 
             </mat-form-field>
-            <p> Selected value: {{selectedValue}} </p>
+            <p> Selected value: {{provinceSearch}} </p>
 
             <mat-form-field>
                 <mat-label>City 市</mat-label>
-                <mat-select [(ngModel)]="selectedValue" (ngModelChange)="changeCity($event)">
+                <mat-select [(ngModel)]="citySearch" (ngModelChange)="changeCity($event)">
                     <mat-option *ngFor="let city of cityList" [value]="city">
                         {{city}}
                     </mat-option>
@@ -23,7 +23,7 @@
 
             <mat-form-field>
                 <mat-label>County 县</mat-label>
-                <mat-select [(ngModel)]="selectedValue" (ngModelChange)="changeCounty($event)">
+                <mat-select [(ngModel)]="countySearch" (ngModelChange)="changeCounty($event)">
                     <mat-option *ngFor="let county of countyList" [value]="county">
                         {{county}}
                     </mat-option>
@@ -31,13 +31,13 @@
             </mat-form-field>
 
         </div>
-
+<!--
         <div>Village Name: <input type="text" [(ngModel)]="villageSearch"></div>
         <div>Province Name: <input type="text" [(ngModel)]="provinceSearch"></div>
         <div>City Name: <input type="text" [(ngModel)]="citySearch"></div>
-        <div>County Name: <input type="text" [(ngModel)]="countySearch"></div>
-        <!--
-        <table>
+        <div>County Name: <input type="text" [(ngModel)]="countySearch"></div> -->
+
+        <!-- <table>
             <tr>
                 <th>province name</th>
             </tr>
