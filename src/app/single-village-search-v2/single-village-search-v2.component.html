@@ -19,7 +19,7 @@
              [matAutocomplete]=auto
              [formControl]="myControl"
              matAutocompletePosition="below"
-             placeholder="输入村名，如‘太平店村’"/>
+             [placeholder]="value"/>
 
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="search($event.option.value)">
         <mat-option *ngFor="let option of filteredOptions" [value]="option"  >

@@ -1,14 +1,24 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FlatTreeControl} from '@angular/cdk/tree';
-import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import {SelectionModel} from '@angular/cdk/collections';
-import {TableData} from '../services/village-name.service';
-import {debounceTime} from 'rxjs/operators';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChange,
+  SimpleChanges,
+} from '@angular/core';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import {
+  MatTreeFlatDataSource,
+  MatTreeFlattener,
+} from '@angular/material/tree';
+import { SelectionModel } from '@angular/cdk/collections';
+import { TableData } from '../services/village-name.service';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-table-detail',
   templateUrl: './table-detail.component.html',
-  styleUrls: ['./table-detail.component.css']
+  styleUrls: ['./table-detail.component.css'],
 })
 export class TableDetailComponent implements OnInit {
   dataChange: TodoItemNode[];
@@ -24,7 +34,9 @@ export class TableDetailComponent implements OnInit {
   dataSource: MatTreeFlatDataSource<TodoItemNode, TodoItemFlatNode>;
 
   /** The selection for checklist */
-  checklistSelection = new SelectionModel<TodoItemFlatNode>(true /* multiple */);
+  checklistSelection = new SelectionModel<TodoItemFlatNode>(
+    true /* multiple */
+  );
   // 储存选择项进行filter
   selectionSaveList: TodoItemFlatNode[][];
 
@@ -33,44 +45,56 @@ export class TableDetailComponent implements OnInit {
   downloadTopic: string;
   downloadVillageId: any;
 
-
   @Input('tabledata') set table(table: TableData) {
+    if (table === undefined) return;
+    console.log(this);
     this._table = table;
-    //console.log(table);
+
     this.filteredList = table.data;
     this.fulllist = this.table.data;
-
 
     this.dataChange = this.buildFileTree(this._table.treeFilter, 0);
     this.dataSource.data = this.dataChange;
 
-    this.downloadVillageId = table.id;
-    this.downloadTopic = table.topic;
-    console.log("this.downloadVillageId",this.downloadVillageId);
-    this.downloadLink = "http://ngrok.luozm.me:8395/ccvg/download"+"/"+this.downloadVillageId+"_"+this.downloadTopic+".csv";
-
+    this.downloadVillageId = table?.id;
+    this.downloadTopic = table?.topic;
+    console.log('this.downloadVillageId', this.downloadVillageId);
+    this.downloadLink =
+      'http://ngrok.luozm.me:8395/ccvg/download' +
+      '/' +
+      this.downloadVillageId +
+      '_' +
+      this.downloadTopic +
+      '.csv';
   } //note: @Input property 必须要使用在OnInit里面才可以,constructor里面会报错
 
-  _table: TableData
+  _table: TableData;
 
   downloadLink: any;
 
-
-  get table():TableData {
-    return this._table
+  get table(): TableData {
+    return this._table;
   }
-
-
 
   constructor() {
     // 一个含有4个function的object
-    this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
-      this.isExpandable, this.getChildren);
+    this.treeFlattener = new MatTreeFlattener(
+      this.transformer,
+      this.getLevel,
+      this.isExpandable,
+      this.getChildren
+    );
     //console.log("treeFlattener",this.treeFlattener);
 
-    this.treeControl = new FlatTreeControl<TodoItemFlatNode>(this.getLevel, this.isExpandable);
+    this.treeControl = new FlatTreeControl<TodoItemFlatNode>(
+      this.getLevel,
+      this.isExpandable
+    );
     //console.log("treeControl",this.treeControl);
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+    this.dataSource = new MatTreeFlatDataSource(
+      this.treeControl,
+      this.treeFlattener
+    );
 
     // this.downloadVillageId = this._table.id;
     // console.log("this.downloadVillageId",this.downloadVillageId);
@@ -93,25 +117,28 @@ export class TableDetailComponent implements OnInit {
   transformer = (node: TodoItemNode, level: number) => {
     const existingNode = this.nestedNodeMap.get(node);
     // console.log("existingNode",existingNode);
-    const flatNode = existingNode && existingNode.description === node.description
-      ? existingNode
-      : new TodoItemFlatNode();
+    const flatNode =
+      existingNode && existingNode.description === node.description
+        ? existingNode
+        : new TodoItemFlatNode();
     flatNode.description = node.description;
     flatNode.level = level;
     flatNode.expandable = !!node.children?.length;
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
     return flatNode;
-  }
+  };
 
   /** Whether all the descendants of the node are selected. */
   // 选中父checkbox的时候会全部选中儿子们
   descendantsAllSelected(node: TodoItemFlatNode): boolean {
     const descendants = this.treeControl.getDescendants(node);
     // console.log("descendants",descendants);
-    const descAllSelected = descendants.length > 0 && descendants.every(child => {
-      return this.checklistSelection.isSelected(child);
-    });
+    const descAllSelected =
+      descendants.length > 0 &&
+      descendants.every((child) => {
+        return this.checklistSelection.isSelected(child);
+      });
     return descAllSelected;
   }
 
@@ -119,7 +146,9 @@ export class TableDetailComponent implements OnInit {
   descendantsPartiallySelected(node: TodoItemFlatNode): boolean {
     const descendants = this.treeControl.getDescendants(node);
     // console.log("descendants",descendants);
-    const result = descendants.some(child => this.checklistSelection.isSelected(child));
+    const result = descendants.some((child) =>
+      this.checklistSelection.isSelected(child)
+    );
     // console.log("result",result);
     return result && !this.descendantsAllSelected(node);
   }
@@ -133,7 +162,7 @@ export class TableDetailComponent implements OnInit {
       : this.checklistSelection.deselect(...descendants);
 
     // Force update for the parent
-    descendants.forEach(child => this.checklistSelection.isSelected(child));
+    descendants.forEach((child) => this.checklistSelection.isSelected(child));
     this.checkAllParentsSelection(node);
   }
 
@@ -156,9 +185,11 @@ export class TableDetailComponent implements OnInit {
   checkRootNodeSelection(node: TodoItemFlatNode): void {
     const nodeSelected = this.checklistSelection.isSelected(node);
     const descendants = this.treeControl.getDescendants(node);
-    const descAllSelected = descendants.length > 0 && descendants.every(child => {
-      return this.checklistSelection.isSelected(child);
-    });
+    const descAllSelected =
+      descendants.length > 0 &&
+      descendants.every((child) => {
+        return this.checklistSelection.isSelected(child);
+      });
     if (nodeSelected && !descAllSelected) {
       this.checklistSelection.deselect(node);
     } else if (!nodeSelected && descAllSelected) {
@@ -191,10 +222,10 @@ export class TableDetailComponent implements OnInit {
    * Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
    * The return value is the list of `TodoItemNode`.
    */
-  buildFileTree(obj: {[key: string]: any}, level: number): TodoItemNode[] {
+  buildFileTree(obj: { [key: string]: any }, level: number): TodoItemNode[] {
     return Object.keys(obj).reduce<TodoItemNode[]>((accumulator, key) => {
       const value = obj[key];
-      console.log("value",value);
+      console.log('value', value);
       const node = new TodoItemNode();
       node.description = key;
 
@@ -211,7 +242,7 @@ export class TableDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("this.table from table-detail", this.table);
+    console.log('this.table from table-detail', this.table);
     //this.downloadLink = "http://ngrok.luozm.me:8395/ccvg/download/"+
     // this.dataChange = this.buildFileTree(this.table.treeFilter, 0);
     // this.dataSource.data = this.dataChange;
@@ -220,51 +251,50 @@ export class TableDetailComponent implements OnInit {
     // this.fulllist = this.table.data;
     //console.log("tble display V2 this.table",this.table);
 
-    this.checklistSelection.changed.pipe(
-      debounceTime(10)
-    ).subscribe((value) => {
-      //console.log("value",value);
-      //console.log("selected",this.checklistSelection.selected);
+    this.checklistSelection.changed
+      .pipe(debounceTime(10))
+      .subscribe((value) => {
+        //console.log("value",value);
+        //console.log("selected",this.checklistSelection.selected);
 
-      let selected = this.checklistSelection.selected;
+        let selected = this.checklistSelection.selected;
 
-      // 这里可以用recursion优化，目前只有三层的搜索
-      this.filteredList = this.fulllist.filter(row => {
-
-        for(let node of selected){
-          // category 1
-          if(node.level == 0 && row.category1.includes(node.description)){
-            return true;
-          }
-          // category 2
-          if(node.level == 1){
-            if(row.category1.includes(this.getParentNode(node).description)
-              && row.category2.includes(node.description)){
+        // 这里可以用recursion优化，目前只有三层的搜索
+        this.filteredList = this.fulllist.filter((row) => {
+          for (let node of selected) {
+            // category 1
+            if (node.level == 0 && row.category1.includes(node.description)) {
               return true;
             }
-          }
-          // category 3
-          if(node.level == 2){
-            let cat2 = this.getParentNode(node);
-            let cat1 = this.getParentNode(cat2);
-            if(row.category1.includes(cat1.description)
-              && row.category2.includes(cat2.description)
-              && row.category3.includes(node.description)){
-              return true;
+            // category 2
+            if (node.level == 1) {
+              if (
+                row.category1.includes(this.getParentNode(node).description) &&
+                row.category2.includes(node.description)
+              ) {
+                return true;
+              }
             }
-
+            // category 3
+            if (node.level == 2) {
+              let cat2 = this.getParentNode(node);
+              let cat1 = this.getParentNode(cat2);
+              if (
+                row.category1.includes(cat1.description) &&
+                row.category2.includes(cat2.description) &&
+                row.category3.includes(node.description)
+              ) {
+                return true;
+              }
+            }
           }
+        }); // end of table-display-V2
+
+        // no table-display-V2 applied
+        if (this.checklistSelection.selected.length == 0) {
+          this.filteredList = this.fulllist;
         }
-
-      }); // end of table-display-V2
-
-      // no table-display-V2 applied
-      if(this.checklistSelection.selected.length == 0){
-        this.filteredList = this.fulllist;
-      }
-
-    });
-
+      });
   }
 }
 
@@ -284,6 +314,3 @@ export class TodoItemFlatNode {
   expandable: boolean;
   type: string;
 }
-
-
-
