@@ -186,7 +186,7 @@
   display: flex;
   flex-direction: column;
   /*justify-content: space-evenly;*/
-  background: aqua;
+  /* background: aqua; */
   text-align: center;
   /* border: 2px; */
   width: 20%;
@@ -207,6 +207,8 @@
 .yearselectedlist {
   background: white;
   flex: 1;
+  height: 500%;
+  margin-top: 5%;
 }
 
 /*===========================*/
@@ -220,7 +222,7 @@
   display: flex;
   flex-direction: column;
   /* background: #793391; */
-  color: white;
+  color: black;
   height: 50%;
   margin: 2px;
   overflow: auto;
@@ -229,7 +231,37 @@
 
 .timeselectedlist {
   /* background: #793391; */
-  color: white;
+  color: black;
   height: 50%;
   margin: 2px;
+}
+
+#itemTemp {
+  text-align: left;
+}
+
+.inputTearField {
+  width: 100%;
+  height: 13%;
+}
+.aligned-with-icon {
+  position: relative;
+  margin-top: 5px;
+}
+
+.mat-icon {
+  width: 2px;
+  height: 20px;
+  margin-right: 9%;
+  /* margin-top: 5%; */
+  /* margin-top: 5px; */
+}
+
+.addYear {
+  margin: 5%;
+}
+
+.multiSearch {
+  margin-left: 5%;
+  /* background-color: rgb(201, 241, 241); */
 }

@@ -99,10 +99,10 @@
     </div>
     <div class="villageselected">已选村庄-Selected Villages</div>
     <ng-container *ngFor="let item of checkItems | keyvalue">
-      <h3>
+      <p>
         {{ item.value.name }} {{ item.value.province }} {{ item.value.city }}
         {{ item.value.county }}
-      </h3>
+      </p>
     </ng-container>
     <div class="villageselectedlist"></div>
   </div>
@@ -115,25 +115,87 @@
           <div class="economy">
             <div class="category">
               <div class="left">
-                类别1-Category1
+                类别
                 <!--                <mat-checkbox (change)="log($event)">选择所有</mat-checkbox>-->
                 <p>经济下类别</p>
-                <mat-checkbox>选择所有</mat-checkbox>
-                <mat-checkbox>总产值</mat-checkbox>
-                <mat-checkbox>集体经济</mat-checkbox>
-                <mat-checkbox>电价</mat-checkbox>
-                <mat-checkbox>用电量</mat-checkbox>
-                <mat-checkbox>耕地面积</mat-checkbox>
-                <mat-checkbox>粮食总产量</mat-checkbox>
-                <mat-checkbox>人均收入</mat-checkbox>
-                <mat-checkbox>人均居住面积</mat-checkbox>
+
+                <mat-checkbox (change)="middleCheckBox($event)"
+                  >选择所有</mat-checkbox
+                >
+                <mat-checkbox name="总产值" (change)="middleCheckBox($event)"
+                  >总产值</mat-checkbox
+                >
+                <mat-checkbox name="集体经济" (change)="middleCheckBox($event)"
+                  >集体经济</mat-checkbox
+                >
+                <mat-checkbox name="电价" (change)="middleCheckBox($event)"
+                  >电价</mat-checkbox
+                >
+                <mat-checkbox name="用电量" (change)="middleCheckBox($event)"
+                  >用电量</mat-checkbox
+                >
+                <mat-checkbox name="耕地面积" (change)="middleCheckBox($event)"
+                  >耕地面积</mat-checkbox
+                >
+                <mat-checkbox
+                  name="粮食总产量"
+                  (change)="middleCheckBox($event)"
+                  >粮食总产量</mat-checkbox
+                >
+                <mat-checkbox name="人均收入" (change)="middleCheckBox($event)"
+                  >人均收入</mat-checkbox
+                >
+                <mat-checkbox
+                  name="人均居住面积"
+                  (change)="middleCheckBox($event)"
+                  >人均居住面积</mat-checkbox
+                >
               </div>
-              <div class="middle">子类1-subCategory1</div>
-              <div class="right">子类2-subCategory2</div>
+              <div class="middle">子类1</div>
+              <div class="right">子类2</div>
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="第一次购买或拥有年份">第一次购买或拥有年份</mat-tab>
+        <mat-tab label="第一次购买或拥有年份"
+          >第一次购买或拥有年份
+
+          <div class="economy">
+            <div class="category">
+              <div class="left">
+                类别
+                <mat-checkbox (change)="middleCheckBox($event)"
+                  >选择所有</mat-checkbox
+                >
+                <mat-checkbox name="液化气" (change)="middleCheckBox($event)"
+                  >液化气
+                </mat-checkbox>
+                <mat-checkbox name="管道燃气" (change)="middleCheckBox($event)"
+                  >管道燃气</mat-checkbox
+                >
+                <mat-checkbox name="天然气" (change)="middleCheckBox($event)"
+                  >天然气
+                </mat-checkbox>
+                <mat-checkbox name="自来水" (change)="middleCheckBox($event)"
+                  >自来水
+                </mat-checkbox>
+                <mat-checkbox name="供电" (change)="middleCheckBox($event)"
+                  >供电</mat-checkbox
+                >
+                <mat-checkbox name="电视机" (change)="middleCheckBox($event)"
+                  >电视机
+                </mat-checkbox>
+                <mat-checkbox name="电话机" (change)="middleCheckBox($event)"
+                  >电话机
+                </mat-checkbox>
+                <mat-checkbox name="有线广播" (change)="middleCheckBox($event)"
+                  >有线广播
+                </mat-checkbox>
+              </div>
+              <div class="middle">子类1</div>
+              <div class="right">子类2</div>
+            </div>
+          </div>
+        </mat-tab>
         <mat-tab label="人口">人口</mat-tab>
         <mat-tab label="军事">军事</mat-tab>
         <mat-tab label="计划生育">计划生育</mat-tab>
@@ -145,6 +207,110 @@
       </mat-tab-group>
     </div>
 
-    <div class="topicselectedlist">已选主题-Selected Topics</div>
+    <div class="topicselectedlist">
+      已选主题-Selected Topics
+      <hr />
+      <p>已选 {{ tempcheckItems.length }}</p>
+      <div *ngFor="let item of tempcheckItems">
+        <div id="itemTemp">
+          {{ item }}
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container3">
+    选择时间-Select Time
+
+    <div class="yearselect">年份-Year</div>
+    <div class="singleyear">
+      <div class="yearselectionlist">
+        <mat-checkbox>全选</mat-checkbox>
+        <mat-checkbox name="1949" (change)="middleCheckBox($event)"
+          >1949</mat-checkbox
+        >
+        <mat-checkbox name="1950" (change)="middleCheckBox($event)"
+          >1950</mat-checkbox
+        >
+        <mat-checkbox name="1951" (change)="middleCheckBox($event)"
+          >1951</mat-checkbox
+        >
+        <mat-checkbox name="1952" (change)="middleCheckBox($event)"
+          >1952</mat-checkbox
+        >
+        <mat-checkbox name="1953" (change)="middleCheckBox($event)"
+          >1953</mat-checkbox
+        >
+        <mat-checkbox name="1954" (change)="middleCheckBox($event)"
+          >1954</mat-checkbox
+        >
+        <mat-checkbox name="1955" (change)="middleCheckBox($event)"
+          >1955</mat-checkbox
+        >
+        <mat-checkbox name="1956" (change)="middleCheckBox($event)"
+          >1956</mat-checkbox
+        >
+        <mat-checkbox name="1957" (change)="middleCheckBox($event)"
+          >1957</mat-checkbox
+        >
+      </div>
+      <div class="yearselectedlist">
+        已选年份-Selected Single Year
+        <p>已选 {{ rightToptempcheckItems.length }}</p>
+        <div *ngFor="let rightitem of rightToptempcheckItems">
+          <p>{{ rightitem }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="yearrangeselect">年段-Year Range</div>
+    <div class="yearrange">
+      <input
+        type="text"
+        class="inputTearField"
+        placeholder="输入开始年份， 例如1949"
+        (keyup)="onInputStartYearField($event)"
+      />
+      <div>
+        <mat-icon>check_circle_outline </mat-icon
+        ><span class="aligned-with-icon">可选年份: 1949至2020</span>
+      </div>
+      至
+      <input
+        type="text"
+        class="inputTearField"
+        placeholder="输入结束年份， 晚于开始年份"
+        (keyup)="onInputEndYearField($event)"
+        #searchCollectorInput
+      />
+
+      <div>
+        <mat-icon>check_circle_outline </mat-icon
+        ><span class="aligned-with-icon">结束年份晚于开始年份</span>
+      </div>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="addYear"
+        (click)="addInputYears()"
+      >
+        添加 - Add
+      </button>
+
+      <div class="yearselectedlist" #myYearDiv>
+        已选年段-Selected Year Range
+      </div>
+    </div>
   </div>
 </div>
+
+<button mat-raised-button color="warn" (click)="resetAll()">
+  重置所有筛选项 - Reset
+</button>
+<button mat-raised-button class="multiSearch">搜索 - Search</button>
+
+<button (click)="goToPage()">
+  <span>Go to Page</span>
+</button>

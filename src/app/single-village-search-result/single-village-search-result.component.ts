@@ -706,6 +706,7 @@ export class SingleVillageSearchResultComponent implements OnInit {
   search(choose: Village) {
     this.villageSearchResultService.searchEncap(choose).then((res) => {
       this.searchResult = res.tables;
+      // console.log(this.searchResult);
       this.selectedTable = this.searchResult[0];
     });
   }
