@@ -32,7 +32,7 @@ export interface VillageNameDisplay{
 
 /* single village search autocomplete display format*/
 export interface Village {
-  isSelected?: boolean; /*ui: backend dont need*/
+  isSelected: boolean; /*ui: backend dont need*/
   name: string;
   province: string;
   city: string;
