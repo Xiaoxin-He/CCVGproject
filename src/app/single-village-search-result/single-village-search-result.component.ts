@@ -700,6 +700,7 @@ export class SingleVillageSearchResultComponent implements OnInit {
 
     //BUG comment out the follow two lines
     this.choose = JSON.parse(window.localStorage.getItem('choose'));
+    // console.log();
     this.search(this.choose);
   }
 

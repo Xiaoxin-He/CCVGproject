@@ -13,6 +13,7 @@ import { ProvinceCityCountyService } from '../services/province-city-county.serv
 import { MatTableDataSource } from '@angular/material/table';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
+import { MultiVillageFilterService } from '../services/multi-village-filter.service';
 
 @Component({
   selector: 'app-search-multi-villages',
@@ -47,13 +48,17 @@ export class SearchMultiVillagesComponent implements OnInit {
   startYearInput: string;
   endYearInput: string;
   searchCollectorInput: string;
+  multiSearchResult: any;
+
+  searchResult: TableData[];
 
   constructor(
     private villageNameService: VillageNameService,
     private provinceCityCountyService: ProvinceCityCountyService,
     private renderer: Renderer2,
     private el: ElementRef,
-    private router: Router
+    private router: Router,
+    private multiVillageFilterService: MultiVillageFilterService
   ) {
     // this.provinceList = this.provinceCityCountyService.getProvince();
   }
@@ -76,7 +81,7 @@ export class SearchMultiVillagesComponent implements OnInit {
             this.countyList.push(item.county);
           }
         }
-        item.isSelected = false;
+        // item.isSelected = false;
       });
       // console.log(result.data[0].city);
       console.log(result.data);
@@ -91,10 +96,19 @@ export class SearchMultiVillagesComponent implements OnInit {
     console.log(this.options.filter);
   }
 
-  checkBoxValue(event: MatCheckboxChange, element) {
+  async checkBoxValue(event: MatCheckboxChange, element) {
     // const isChecked = (<HTMLInputElement>event).checked;
     console.log('check box event', event.checked);
+    this.multiSearchResult = element;
     console.log('element', element);
+
+    //TODO
+    this.searchResult =
+      await this.multiVillageFilterService.filterSelectedTopics(element);
+    console.log('this is the searchResult', this.searchResult);
+
+    //BUG
+    this.router.navigate(['/single-village-search']);
 
     if (event.checked) {
       this.checkItems.set(element.id, element);
@@ -201,6 +215,11 @@ export class SearchMultiVillagesComponent implements OnInit {
   }
 
   goToPage() {
+    console.log(this.multiSearchResult);
+    window.localStorage.setItem(
+      'choose',
+      JSON.stringify(this.multiSearchResult)
+    );
     this.router.navigate(['/single-village-search-result']);
   }
 }
