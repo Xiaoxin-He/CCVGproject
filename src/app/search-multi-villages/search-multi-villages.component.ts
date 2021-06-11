@@ -14,6 +14,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 import { MultiVillageFilterService } from '../services/multi-village-filter.service';
+import { HttpClient } from '@angular/common/http';
+import { Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-search-multi-villages',
@@ -52,12 +54,15 @@ export class SearchMultiVillagesComponent implements OnInit {
 
   searchResult: TableData[];
 
+  villageidList: any = [];
+
   constructor(
     private villageNameService: VillageNameService,
     private provinceCityCountyService: ProvinceCityCountyService,
     private renderer: Renderer2,
     private el: ElementRef,
-    private router: Router,
+    private router: Router, // private multiVillageFilterService: MultiVillageFilterService,
+    private http: HttpClient,
     private multiVillageFilterService: MultiVillageFilterService
   ) {
     // this.provinceList = this.provinceCityCountyService.getProvince();
@@ -101,20 +106,35 @@ export class SearchMultiVillagesComponent implements OnInit {
     console.log('check box event', event.checked);
     this.multiSearchResult = element;
     console.log('element', element);
+    console.log(element.id);
+
+    if (element.id) {
+      this.villageidList.push(element.id);
+    }
 
     //TODO
-    this.searchResult =
-      await this.multiVillageFilterService.filterSelectedTopics(element);
-    console.log('this is the searchResult', this.searchResult);
+    // this.searchResult =
+    //   await this.multiVillageFilterService.filterSelectedTopics(element);
+    // console.log('this is the searchResult', this.searchResult);
 
     //BUG
-    this.router.navigate(['/single-village-search']);
+    // this.router.navigate(['/single-village-search']);
 
     if (event.checked) {
       this.checkItems.set(element.id, element);
     } else {
       this.checkItems.delete(element.id);
     }
+  }
+
+  //TODO
+  onCreatePost(postData: { villageid: any; topic: any }) {
+    // Send Http request
+    this.http
+      .post('http://ngrok.luozm.me:8395/ccvg/advancesearch', postData)
+      .subscribe((responseData) => {
+        console.log('responseData', responseData);
+      });
   }
 
   //TODO  use dynamic db data
@@ -214,12 +234,28 @@ export class SearchMultiVillagesComponent implements OnInit {
     // this.startYearInput = '';
   }
 
-  goToPage() {
+  async goToPage() {
+    console.log(this.villageidList);
+    console.log(this.checkItems);
     console.log(this.multiSearchResult);
+
+    const postData = {
+      villageid: this.villageidList,
+      topic: ['economy', 'population'],
+    };
+
+    // this.searchResult =
+    //   await this.multiVillageFilterService.onPostMultiVillages(postData);
+    console.log(
+      'this is the searchResult from service',
+      await this.multiVillageFilterService.onPostMultiVillages(postData)
+    );
+    // this.onCreatePost(postData);
+
     window.localStorage.setItem(
       'choose',
       JSON.stringify(this.multiSearchResult)
     );
-    this.router.navigate(['/single-village-search-result']);
+    this.router.navigate(['/multi-village-search-result']);
   }
 }

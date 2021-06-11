@@ -65,6 +65,7 @@ import { TableDetailComponent } from './table-detail/table-detail.component';
 import { SingleVillageSearchResultComponent } from './single-village-search-result/single-village-search-result.component';
 import { SearchMultiVillagesComponent } from './search-multi-villages/search-multi-villages.component';
 import { VillagesearchPipe } from './search-multi-villages/villagesearch.pipe';
+import { MuitiVillageResultsComponent } from './muiti-village-results/muiti-village-results.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import { VillagesearchPipe } from './search-multi-villages/villagesearch.pipe';
     SingleVillageSearchResultComponent,
     SearchMultiVillagesComponent,
     VillagesearchPipe,
+    MuitiVillageResultsComponent,
   ],
   imports: [
     HttpClientModule,
@@ -101,6 +103,17 @@ import { VillagesearchPipe } from './search-multi-villages/villagesearch.pipe';
         component: SingleVillageSearchResultComponent,
       },
       { path: '', redirectTo: '/single-village-search', pathMatch: 'full' },
+    ]),
+    RouterModule.forRoot([
+      {
+        path: 'multi-village-search',
+        component: SearchMultiVillagesComponent,
+      },
+      {
+        path: 'multi-village-search-result',
+        component: MuitiVillageResultsComponent,
+      },
+      { path: '', redirectTo: '/multi-village-search', pathMatch: 'full' },
     ]),
 
     A11yModule,
