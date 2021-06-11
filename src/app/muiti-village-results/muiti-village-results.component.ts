@@ -35,7 +35,7 @@ export class MuitiVillageResultsComponent implements OnInit {
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   //TODO change the name here
   displayedColumns1: string[] = [
-    'gazetteerId',
+    // 'gazetteerId',
     'gazetteerName',
     'villageId',
     'villageName',
@@ -50,9 +50,9 @@ export class MuitiVillageResultsComponent implements OnInit {
 
   //TODO
   displayedColumns2: string[] = [
-    'villageId',
+    // 'villageId',
     'villageName',
-    'gazetteerId',
+    // 'gazetteerId',
     'gazetteerName',
     'publishYear',
     'publishType',
@@ -62,7 +62,7 @@ export class MuitiVillageResultsComponent implements OnInit {
   //TODO
   displayedColumns3: string[] = [
     'gazetteerName',
-    'gazetteerId',
+    // 'gazetteerId',
     'category1',
     'category2',
     'category3',
