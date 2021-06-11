@@ -90,8 +90,10 @@ export class SearchMultiVillagesComponent implements OnInit {
       });
       // console.log(result.data[0].city);
       console.log(result.data);
+
       // console.log(this.countyList);
       this.options = new MatTableDataSource(result.data);
+      console.log(this.options);
     });
   }
 

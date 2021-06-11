@@ -1,38 +1,36 @@
 import { Injectable } from '@angular/core';
-import {HttpServiceService} from './http-service.service';
-import {environment} from '../../environments/environment';
-
-
+import { HttpServiceService } from './http-service.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class VillageNameService {
-
-
-  constructor(private httpService: HttpServiceService) {
-
-  }
+  constructor(private httpService: HttpServiceService) {}
 
   // auto-complete dropdown: only retrieve 100 village
-  async getVillages(): Promise<VillageNameDisplay> {//Village[]{
+  async getVillages(): Promise<VillageNameDisplay> {
+    //Village[]{
     return this.httpService.get('ccvg/namesearch');
   }
 
-  // village name filter: by user input into post request
-  async filterVillages(searchName: string): Promise<VillageNameDisplay>{
-    return this.httpService.post('ccvg/namesearch',{"namefilter":searchName});
-  }
+  // async getMultiVillages(): Promise<BasicVillageInformation> {
+  //   return this.httpService.post('ccvg/advancesearch');
+  // }
 
+  // village name filter: by user input into post request
+  async filterVillages(searchName: string): Promise<VillageNameDisplay> {
+    return this.httpService.post('ccvg/namesearch', { namefilter: searchName });
+  }
 }
 
-export interface VillageNameDisplay{
+export interface VillageNameDisplay {
   data: Village[];
 }
 
 /* single village search autocomplete display format*/
 export interface Village {
-  isSelected: boolean; /*ui: backend dont need*/
+  isSelected: boolean /*ui: backend dont need*/;
   name: string;
   province: string;
   city: string;
@@ -40,15 +38,14 @@ export interface Village {
   id: string;
 }
 
-
 export interface VillageSearchResult {
   tables: TableData[];
 }
 
 // both category and table-display-V2 use this one
 interface Category {
-  description: string //风灾
-  type: string //wind
+  description: string; //风灾
+  type: string; //wind
 }
 
 export interface TableData {
@@ -73,12 +70,11 @@ export interface TableData {
   // type: 'single-search' | 'multi-search'
 }
 
-export interface ColumnsFormat{
+export interface ColumnsFormat {
   columnsHeaderChinese: string;
   columnsDef: string;
   cell: any;
 }
-
 
 /*---------------------------------------------------------------------------------------*/
 /* 13 Table format */
@@ -95,7 +91,7 @@ export interface BasicVillageInformation {
   unit: string;
 }
 
-export interface BasicGazetteerInformation{
+export interface BasicGazetteerInformation {
   villageId: string;
   villageName: string;
   gazetteerId: number;
@@ -104,14 +100,14 @@ export interface BasicGazetteerInformation{
   publishType: string;
 }
 
-export interface NaturalDisaster{
+export interface NaturalDisaster {
   gazetteerName: string;
   gazetteerId: number;
   year: number;
   category1: Category;
 }
 
-export interface NaturalEnvironment{
+export interface NaturalEnvironment {
   gazetteerName: string;
   gazetteerId: number;
   category1: string;
@@ -120,7 +116,7 @@ export interface NaturalEnvironment{
 }
 
 /*计划生育familyplanning, 民族ethnic*/
-export interface OneLevelResult{
+export interface OneLevelResult {
   gazetteerName: string;
   gazetteerId: number;
   category1: string;
@@ -131,7 +127,7 @@ export interface OneLevelResult{
 }
 
 /*军事政治military, 人口population*/
-export interface TwoLevelResult{
+export interface TwoLevelResult {
   gazetteerName: string;
   gazetteerId: number;
   category1: string;
@@ -143,7 +139,7 @@ export interface TwoLevelResult{
 }
 
 /*教育education, 经济economy*/
-export interface ThreeLevelResult{
+export interface ThreeLevelResult {
   gazetteerName: string;
   gazetteerId: number;
   category1: string;
@@ -155,7 +151,7 @@ export interface ThreeLevelResult{
   unit: string;
 }
 
-export interface LastName{
+export interface LastName {
   gazetteerName: string;
   gazetteerId: number;
   firstLastNameId: string;
@@ -166,7 +162,7 @@ export interface LastName{
   totalNumberOfLastNameInVillage: number;
 }
 
-export interface FirstAvalabilityOrPurchase{
+export interface FirstAvalabilityOrPurchase {
   gazetteerName: string;
   gazetteerId: number;
   category1: string;
