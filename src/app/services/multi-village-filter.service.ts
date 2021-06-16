@@ -56,7 +56,7 @@ export class MultiVillageFilterService {
         return { data: [] };
       });
 
-    console.log('i got the response', response);
+    // console.log('i got the response', response);
 
     return response;
     // // Send Http request

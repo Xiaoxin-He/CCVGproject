@@ -56,6 +56,11 @@ export class SearchMultiVillagesComponent implements OnInit {
 
   villageidList: any = [];
 
+  middleBoxCategory1: string[] = [];
+
+  category1Map = new Map();
+  cat1Cat2Map = new Map();
+
   constructor(
     private villageNameService: VillageNameService,
     private provinceCityCountyService: ProvinceCityCountyService,
@@ -100,34 +105,138 @@ export class SearchMultiVillagesComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.options.filter = filterValue.trim().toLowerCase();
-    console.log(this.options.filter);
+    // console.log(this.options.filter);
   }
 
   async checkBoxValue(event: MatCheckboxChange, element) {
     // const isChecked = (<HTMLInputElement>event).checked;
-    console.log('check box event', event.checked);
+    // console.log('check box event', event.checked);
     this.multiSearchResult = element;
-    console.log('element', element);
-    console.log(element.id);
+    // console.log('current check box element', element);
+    // console.log(element.id);
+
+    const postDataCheckBox = {
+      villageid: element.id,
+      topic: ['economy'],
+    };
 
     if (element.id) {
       this.villageidList.push(element.id);
+
+      const currentServiceData =
+        await this.multiVillageFilterService.onPostMultiVillages(
+          postDataCheckBox
+        );
+
+      // console.log(currentServiceData[2].data[0].category1);
+
+      // this.getCheckBoxLanguageChinese(currentServiceData[2].data[0].category1);
+
+      this.multiVillageFilterService
+        .onPostMultiVillages(postDataCheckBox)
+        .then((result) => {
+          // console.log(result[2]);
+          result[2].data.map((item) => {
+            // console.log(item);
+
+            // console.log(this.cat1Cat2Map);
+            // console.log(this.middleBoxCategory1.includes(item.category1));
+            const getChineseWordCategory1 = item.category1
+              .split('')
+              .filter((char) => /\p{Script=Han}/u.test(char))
+              .join('');
+            // console.log('getChineseWord', getChineseWordCategory1);
+            // console.log(item.category1);
+            if (
+              this.middleBoxCategory1.indexOf(getChineseWordCategory1) == -1
+            ) {
+              this.middleBoxCategory1.push(getChineseWordCategory1);
+              this.cat1Cat2Map.set(item.category1, item.category2);
+              console.log('trigger');
+              // this.category1Map.set(element.id, this.middleBoxCategory1);
+            }
+          });
+          console.log('filter category 1 result ', this.middleBoxCategory1);
+        });
     }
-
-    //TODO
-    // this.searchResult =
-    //   await this.multiVillageFilterService.filterSelectedTopics(element);
-    // console.log('this is the searchResult', this.searchResult);
-
-    //BUG
-    // this.router.navigate(['/single-village-search']);
+    console.log(await this.cat1Cat2Map);
+    // this.cat1Cat2Map.forEach((value: any, key: any) => {
+    //   console.log(key, value);
+    // });
+    // for (let [key, value] of this.cat1Cat2Map) {
+    //   console.log(key, value);
+    // }
 
     if (event.checked) {
       this.checkItems.set(element.id, element);
+      console.log(this.checkItems.get(element.id));
+      this.category1Map.set(element.id, this.middleBoxCategory1);
+      await console.log(this.cat1Cat2Map.get(element.id));
+      // console.log(this.category1Map);
+      // console.log(this.category1Map.get(element.id));
+      // console.log(this.cat1Cat2Map.get(element.id));
     } else {
       this.checkItems.delete(element.id);
+      this.category1Map.delete(element.id);
     }
+
+    // console.log('hashmap', this.category1Map);
+
+    // console.log(
+    //   'diff',
+    //   this.arr_diff(['人均居住面积', 'b'], ['b', '耕地面积'])
+    // );
   }
+
+  arr_diff(a1, a2) {
+    var a = [],
+      diff = [];
+
+    for (var i = 0; i < a1.length; i++) {
+      a[a1[i]] = true;
+    }
+
+    for (var i = 0; i < a2.length; i++) {
+      if (a[a2[i]]) {
+        delete a[a2[i]];
+      } else {
+        a[a2[i]] = true;
+      }
+    }
+    for (var k in a) {
+      diff.push(k);
+    }
+    return diff;
+  }
+
+  getCheckboxValuesMiddle() {}
+
+  // async getCheckBoxLanguageChinese(str: string) {
+  //   const getChinese = str
+  //     .split('')
+  //     .filter((char) => /\p{Script=Han}/u.test(char))
+  //     .join('');
+
+  //   console.log('getChinese', getChinese);
+
+  //   return getChinese;
+  //   // const regex = /[a-zA-Z0-9]{1,}/gm;
+  //   // const regex = \u4E00-\u9FCC];
+  //   // // const str = `你is我你is我你is我你is我你is我`;
+  //   // let m;
+
+  //   // while ((m = regex.exec(str)) !== null) {
+  //   //   // This is necessary to avoid infinite loops with zero-width matches
+  //   //   if (m.index === regex.lastIndex) {
+  //   //     regex.lastIndex++;
+  //   //   }
+
+  //   //   // The result can be accessed through the `m`-variable.
+  //   //   m.forEach((match) => {
+  //   //     console.log(`Found match, ${match}`);
+  //   //   });
+  //   // }
+  // }
 
   //TODO
   onCreatePost(postData: { villageid: any; topic: any }) {
@@ -141,10 +250,15 @@ export class SearchMultiVillagesComponent implements OnInit {
 
   //TODO  use dynamic db data
   middleCheckBox(event: MatCheckboxChange) {
+    const selectedText = event.source._elementRef.nativeElement.innerText;
     if (event.checked) {
-      this.tempcheckItems.push(event.source.name);
+      console.log(event.source._elementRef.nativeElement.innerText);
+
+      this.tempcheckItems.push(selectedText);
+      // this.tempcheckItems.push(event.source.name);
     } else {
-      var index = this.tempcheckItems.indexOf(event.source.name);
+      // var index = this.tempcheckItems.indexOf(event.source.name);
+      var index = this.tempcheckItems.indexOf(selectedText);
       if (index > -1) {
         this.tempcheckItems.splice(index, 1);
       }

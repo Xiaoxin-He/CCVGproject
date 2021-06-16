@@ -85,6 +85,7 @@
         <ng-container matColumnDef="city">
           <th mat-header-cell *matHeaderCellDef>市</th>
           <td mat-cell *matCellDef="let element">{{ element.city }}</td>
+          <button>hallo</button>
         </ng-container>
 
         <!-- Symbol Column -->
@@ -92,8 +93,6 @@
           <th mat-header-cell *matHeaderCellDef>县</th>
           <td mat-cell *matCellDef="let element">{{ element.county }}</td>
         </ng-container>
-
-        <!--      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
@@ -119,37 +118,42 @@
                 <!--                <mat-checkbox (change)="log($event)">选择所有</mat-checkbox>-->
                 <p>经济下类别</p>
 
-                <mat-checkbox (change)="middleCheckBox($event)"
+                <!-- <mat-checkbox (change)="middleCheckBox($event)"
                   >选择所有</mat-checkbox
+                > -->
+
+                <ul
+                  class="category1"
+                  [ngStyle]="{
+                    'list-style-type': 'none',
+                    margin: '0',
+                    padding: '0'
+                  }"
                 >
-                <mat-checkbox name="总产值" (change)="middleCheckBox($event)"
-                  >总产值</mat-checkbox
+                  <li *ngFor="let item of middleBoxCategory1">
+                    <mat-checkbox (change)="middleCheckBox($event)">
+                      {{ item }}
+                    </mat-checkbox>
+                  </li>
+                </ul>
+
+                <!-- <ul
+                  class="category1"
+                  [ngStyle]="{
+                    'list-style-type': 'none',
+                    margin: '0',
+                    padding: '0'
+                  }"
+                  *ngFor="let items of category1Map | keyvalue"
                 >
-                <mat-checkbox name="集体经济" (change)="middleCheckBox($event)"
-                  >集体经济</mat-checkbox
-                >
-                <mat-checkbox name="电价" (change)="middleCheckBox($event)"
-                  >电价</mat-checkbox
-                >
-                <mat-checkbox name="用电量" (change)="middleCheckBox($event)"
-                  >用电量</mat-checkbox
-                >
-                <mat-checkbox name="耕地面积" (change)="middleCheckBox($event)"
-                  >耕地面积</mat-checkbox
-                >
-                <mat-checkbox
-                  name="粮食总产量"
-                  (change)="middleCheckBox($event)"
-                  >粮食总产量</mat-checkbox
-                >
-                <mat-checkbox name="人均收入" (change)="middleCheckBox($event)"
-                  >人均收入</mat-checkbox
-                >
-                <mat-checkbox
-                  name="人均居住面积"
-                  (change)="middleCheckBox($event)"
-                  >人均居住面积</mat-checkbox
-                >
+                  <li *ngFor="let item of items.value">
+                    <mat-checkbox
+                      (change)="getCheckboxValuesMiddle($event, item)"
+                    >
+                      {{ item }}
+                    </mat-checkbox>
+                  </li>
+                </ul> -->
               </div>
               <div class="middle">子类1</div>
               <div class="right">子类2</div>
