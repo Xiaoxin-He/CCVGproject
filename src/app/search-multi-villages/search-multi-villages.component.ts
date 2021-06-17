@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { MultiVillageFilterService } from '../services/multi-village-filter.service';
 import { HttpClient } from '@angular/common/http';
 import { Input, Output, EventEmitter } from '@angular/core';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-search-multi-villages',
@@ -24,6 +25,7 @@ import { Input, Output, EventEmitter } from '@angular/core';
 })
 export class SearchMultiVillagesComponent implements OnInit {
   @ViewChild('myYearDiv', { static: false }) myYearDiv: ElementRef;
+  @ViewChild('tabGroup') tabGroup: MatTabGroup;
   options;
   //TODO this is fake data for province, need change later
   provinceList: string[] = [];
@@ -37,6 +39,20 @@ export class SearchMultiVillagesComponent implements OnInit {
     'city',
     'county',
   ];
+
+  displayedMiddleTabs: string[] = [
+    '经济',
+    '第一次购买或拥有年份',
+    '人口',
+    '军事',
+    '计划生育',
+    '教育',
+    '政治',
+    '姓氏',
+    '自然环境',
+    '自然灾害',
+  ];
+
   dataSource;
   selectedValue: string;
   provinceSearch: string;
@@ -51,6 +67,7 @@ export class SearchMultiVillagesComponent implements OnInit {
   endYearInput: string;
   searchCollectorInput: string;
   multiSearchResult: any;
+  selectedTabLabel: string;
 
   searchResult: TableData[];
 
@@ -60,6 +77,11 @@ export class SearchMultiVillagesComponent implements OnInit {
 
   category1Map = new Map();
   cat1Cat2Map = new Map();
+  middleTabsMap = new Map([
+    ['经济', 'economy'],
+    ['第一次购买或拥有年份', 'firstavailabilityorpurchase'],
+    ['人口', 'population'],
+  ]);
 
   constructor(
     private villageNameService: VillageNameService,
@@ -98,7 +120,7 @@ export class SearchMultiVillagesComponent implements OnInit {
 
       // console.log(this.countyList);
       this.options = new MatTableDataSource(result.data);
-      console.log(this.options);
+      // console.log(this.options);
     });
   }
 
@@ -115,11 +137,20 @@ export class SearchMultiVillagesComponent implements OnInit {
     // console.log('current check box element', element);
     // console.log(element.id);
 
-    const postDataCheckBox = {
+    console.log(this.middleTabsMap.get(this.selectedTabLabel));
+    let getTopic = this.middleTabsMap.get(this.selectedTabLabel);
+    if (getTopic === undefined) {
+      getTopic = 'economy';
+    }
+
+    let postDataCheckBox = {
       villageid: element.id,
-      topic: ['economy'],
+      topic: [getTopic],
+      //TODO
+      // topic: ['economy'],
     };
 
+    console.log(getTopic);
     if (element.id) {
       this.villageidList.push(element.id);
 
@@ -128,14 +159,15 @@ export class SearchMultiVillagesComponent implements OnInit {
           postDataCheckBox
         );
 
-      // console.log(currentServiceData[2].data[0].category1);
+      console.log(currentServiceData);
 
       // this.getCheckBoxLanguageChinese(currentServiceData[2].data[0].category1);
-
+      console.log('postDataCheckBox', postDataCheckBox);
       this.multiVillageFilterService
         .onPostMultiVillages(postDataCheckBox)
         .then((result) => {
-          // console.log(result[2]);
+          console.log(result);
+          console.log(result[2]);
           result[2].data.map((item) => {
             // console.log(item);
 
@@ -152,7 +184,7 @@ export class SearchMultiVillagesComponent implements OnInit {
             ) {
               this.middleBoxCategory1.push(getChineseWordCategory1);
               this.cat1Cat2Map.set(item.category1, item.category2);
-              console.log('trigger');
+              // console.log('trigger');
               // this.category1Map.set(element.id, this.middleBoxCategory1);
             }
           });
@@ -186,6 +218,13 @@ export class SearchMultiVillagesComponent implements OnInit {
     //   'diff',
     //   this.arr_diff(['人均居住面积', 'b'], ['b', '耕地面积'])
     // );
+  }
+
+  tabChanged(event) {
+    //TODO this is a change event
+    this.selectedTabLabel = event.tab.textLabel;
+    console.log(event.tab.textLabel);
+    console.log(this.middleTabsMap.get(this.selectedTabLabel));
   }
 
   arr_diff(a1, a2) {

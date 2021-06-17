@@ -85,7 +85,7 @@
         <ng-container matColumnDef="city">
           <th mat-header-cell *matHeaderCellDef>市</th>
           <td mat-cell *matCellDef="let element">{{ element.city }}</td>
-          <button>hallo</button>
+          <!-- <button>hallo</button> -->
         </ng-container>
 
         <!-- Symbol Column -->
@@ -109,19 +109,20 @@
   <div class="container2">
     选择主题-Select Topics
     <div class="topics">
-      <mat-tab-group animationDuration="0ms">
-        <mat-tab label="经济">
+      <mat-tab-group
+        animationDuration="0ms"
+        (selectedTabChange)="tabChanged($event)"
+        #tabGroup
+      >
+        <mat-tab label="{{ item }}" *ngFor="let item of displayedMiddleTabs">
           <div class="economy">
             <div class="category">
               <div class="left">
                 类别
-                <!--                <mat-checkbox (change)="log($event)">选择所有</mat-checkbox>-->
-                <p>经济下类别</p>
-
-                <!-- <mat-checkbox (change)="middleCheckBox($event)"
+                <p>{{ item }} 下类别</p>
+                <mat-checkbox (change)="middleCheckBox($event)"
                   >选择所有</mat-checkbox
-                > -->
-
+                >
                 <ul
                   class="category1"
                   [ngStyle]="{
@@ -160,54 +161,6 @@
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="第一次购买或拥有年份"
-          >第一次购买或拥有年份
-
-          <div class="economy">
-            <div class="category">
-              <div class="left">
-                类别
-                <mat-checkbox (change)="middleCheckBox($event)"
-                  >选择所有</mat-checkbox
-                >
-                <mat-checkbox name="液化气" (change)="middleCheckBox($event)"
-                  >液化气
-                </mat-checkbox>
-                <mat-checkbox name="管道燃气" (change)="middleCheckBox($event)"
-                  >管道燃气</mat-checkbox
-                >
-                <mat-checkbox name="天然气" (change)="middleCheckBox($event)"
-                  >天然气
-                </mat-checkbox>
-                <mat-checkbox name="自来水" (change)="middleCheckBox($event)"
-                  >自来水
-                </mat-checkbox>
-                <mat-checkbox name="供电" (change)="middleCheckBox($event)"
-                  >供电</mat-checkbox
-                >
-                <mat-checkbox name="电视机" (change)="middleCheckBox($event)"
-                  >电视机
-                </mat-checkbox>
-                <mat-checkbox name="电话机" (change)="middleCheckBox($event)"
-                  >电话机
-                </mat-checkbox>
-                <mat-checkbox name="有线广播" (change)="middleCheckBox($event)"
-                  >有线广播
-                </mat-checkbox>
-              </div>
-              <div class="middle">子类1</div>
-              <div class="right">子类2</div>
-            </div>
-          </div>
-        </mat-tab>
-        <mat-tab label="人口">人口</mat-tab>
-        <mat-tab label="军事">军事</mat-tab>
-        <mat-tab label="计划生育">计划生育</mat-tab>
-        <mat-tab label="教育">教育</mat-tab>
-        <mat-tab label="政治">政治</mat-tab>
-        <mat-tab label="姓氏">姓氏</mat-tab>
-        <mat-tab label="自然环境">自然环境</mat-tab>
-        <mat-tab label="自然灾害">自然灾害</mat-tab>
       </mat-tab-group>
     </div>
 
