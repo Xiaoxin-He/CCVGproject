@@ -17,7 +17,7 @@ import { MultiVillageFilterService } from '../services/multi-village-filter.serv
 import { HttpClient } from '@angular/common/http';
 import { Input, Output, EventEmitter } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
-import { Category } from '../multi-village-search/modals/formatData';
+import { Category } from './modals/formatData';
 
 @Component({
   selector: 'app-search-multi-villages',
@@ -75,6 +75,7 @@ export class SearchMultiVillagesComponent implements OnInit {
   villageidList: any = [];
 
   middleBoxCategory1: string[] = [];
+  middleBoxCategory2: string[] = [];
 
   category1Map = new Map();
   cat1Cat2Map = new Map();
@@ -202,11 +203,13 @@ export class SearchMultiVillagesComponent implements OnInit {
             }
 
             for (let i in this.categoryResult) {
-              console.log(i);
+              // console.log(i);
               this.middleBoxCategory1.push(i);
               // console.log(result[i].childCategories);
             }
             console.log('result', this.categoryResult);
+
+            // if(this.categoryResult)
           }
 
           // for(let i = 0; i < Object.keys(result).length; i++) {
@@ -261,6 +264,50 @@ export class SearchMultiVillagesComponent implements OnInit {
     console.log(this.middleTabsMap.get(this.selectedTabLabel));
   }
 
+  getCheckboxValuesMiddle() {}
+
+  //TODO
+  onCreatePost(postData: { villageid: any; topic: any }) {
+    // Send Http request
+    this.http
+      .post('http://ngrok.luozm.me:8395/ccvg/advancesearch', postData)
+      .subscribe((responseData) => {
+        console.log('responseData', responseData);
+      });
+  }
+
+  //TODO  use dynamic db data
+  middleCheckBox(event: MatCheckboxChange) {
+    const selectedText = event.source._elementRef.nativeElement.innerText;
+
+    // console.log(this.categoryResult[selectedText].childCategories[0]);
+
+    let category2Text = this.categoryResult[selectedText].childCategories[0];
+
+    // console.log(selectedText);
+    if (event.checked) {
+      // console.log(event.source._elementRef.nativeElement.innerText);
+
+      this.tempcheckItems.push(selectedText);
+
+      if (this.categoryResult[selectedText].childCategories[0] !== 'null') {
+        this.middleBoxCategory2.push(category2Text);
+      }
+      // this.tempcheckItems.push(event.source.name);
+    } else {
+      // var index = this.tempcheckItems.indexOf(event.source.name);
+      var index = this.tempcheckItems.indexOf(selectedText);
+      if (index > -1) {
+        this.tempcheckItems.splice(index, 1);
+      }
+
+      // category2Text == 'null';
+      this.middleBoxCategory2 = [];
+
+      // this.checkItems.delete(element.id);
+    }
+  }
+
   arr_diff(a1, a2) {
     var a = [],
       diff = [];
@@ -280,38 +327,6 @@ export class SearchMultiVillagesComponent implements OnInit {
       diff.push(k);
     }
     return diff;
-  }
-
-  getCheckboxValuesMiddle() {}
-
-  //TODO
-  onCreatePost(postData: { villageid: any; topic: any }) {
-    // Send Http request
-    this.http
-      .post('http://ngrok.luozm.me:8395/ccvg/advancesearch', postData)
-      .subscribe((responseData) => {
-        console.log('responseData', responseData);
-      });
-  }
-
-  //TODO  use dynamic db data
-  middleCheckBox(event: MatCheckboxChange) {
-    const selectedText = event.source._elementRef.nativeElement.innerText;
-
-    // console.log(selectedText);
-    if (event.checked) {
-      // console.log(event.source._elementRef.nativeElement.innerText);
-
-      this.tempcheckItems.push(selectedText);
-      // this.tempcheckItems.push(event.source.name);
-    } else {
-      // var index = this.tempcheckItems.indexOf(event.source.name);
-      var index = this.tempcheckItems.indexOf(selectedText);
-      if (index > -1) {
-        this.tempcheckItems.splice(index, 1);
-      }
-      // this.checkItems.delete(element.id);
-    }
   }
 
   rightTopCheckBox(event: MatCheckboxChange) {
