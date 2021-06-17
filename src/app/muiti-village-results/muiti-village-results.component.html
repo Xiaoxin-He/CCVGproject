@@ -1,6 +1,4 @@
-<p>muiti-village-results works!</p>
-
-<button mat-raised-button color="warn" (click)="getData()">get data</button>
+<!-- <button mat-raised-button color="warn" (click)="getData()">get data</button> -->
 
 <h2>村庄基本信息</h2>
 <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8">
@@ -71,23 +69,11 @@
   <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
-  <!-- Position Column -->
-  <!-- <ng-container matColumnDef="villageId">
-    <th mat-header-cell *matHeaderCellDef>村庄代码</th>
-    <td mat-cell *matCellDef="let element">{{ element.villageId }}</td>
-  </ng-container> -->
-
   <!-- Name Column -->
   <ng-container matColumnDef="villageName">
     <th mat-header-cell *matHeaderCellDef>村名汉字</th>
     <td mat-cell *matCellDef="let element">{{ element.villageName }}</td>
   </ng-container>
-
-  <!-- Weight Column -->
-  <!-- <ng-container matColumnDef="gazetteerId">
-    <th mat-header-cell *matHeaderCellDef>村志代码</th>
-    <td mat-cell *matCellDef="let element">{{ element.gazetteerId }}</td>
-  </ng-container> -->
 
   <!-- Symbol Column -->
   <ng-container matColumnDef="gazetteerName">
@@ -120,12 +106,6 @@
     <th mat-header-cell *matHeaderCellDef>村志名称</th>
     <td mat-cell *matCellDef="let element">{{ element.gazetteerName }}</td>
   </ng-container>
-
-  <!-- Name Column -->
-  <!-- <ng-container matColumnDef="gazetteerId">
-    <th mat-header-cell *matHeaderCellDef>村志代码</th>
-    <td mat-cell *matCellDef="let element">{{ element.gazetteerId }}</td>
-  </ng-container> -->
 
   <!-- Weight Column -->
   <ng-container matColumnDef="category1">
@@ -168,4 +148,4 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns3"></tr>
 </table>
 
-<h2>第一次购买或拥有年份</h2>
+<!-- <h2>第一次购买或拥有年份</h2> -->

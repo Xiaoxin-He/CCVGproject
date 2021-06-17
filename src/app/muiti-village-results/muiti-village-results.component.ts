@@ -79,20 +79,23 @@ export class MuitiVillageResultsComponent implements OnInit {
     // this.multiVillageFilterService.getUserList.then((result) => {
     //   console.log('result!!', result);
     // });
+
+    this.getData();
   }
 
   async getData() {
     // console.log('get it !', await this.multiVillageFilterService.getUserList);
     this.userInput = await this.multiVillageFilterService.getUserList;
     console.log(
-      'this is the searchResult from service ininnnnn',
+      'this is the searchResult from service 🙄',
       await this.multiVillageFilterService.onPostMultiVillages(this.userInput)
     );
 
     this.multiVillageFilterService
       .onPostMultiVillages(this.userInput)
       .then((results) => {
-        console.log('hello', results[3].data);
+        console.log('total result', results);
+        // console.log('result data', results[3].data);
 
         this.dataSource1 = new MatTableDataSource(results[0].data);
         this.dataSource2 = new MatTableDataSource(results[1].data);
